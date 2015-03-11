@@ -30,7 +30,6 @@ function createRoom(rx, ry, data)
 	{
 		for(var ty = 0; ty < room.height; ty++)
 		{
-		
 			var tile = roomData[ty * room.width + tx]
 
 			if(data.doors.indexOf("north") != -1
@@ -55,6 +54,7 @@ function createRoom(rx, ry, data)
 				var tileHTML = $("<div class='wall tile'>")
 				tileHTML.css({top: ((ry * 9) + ty) + "em"})
 				tileHTML.css({left: ((rx * 11) + tx) + "em"})
+				tileHTML.css({zIndex: (ry * 9) + ty})
 				$("#tiles").append(tileHTML)
 			}
 		}
@@ -101,6 +101,7 @@ Loop(function(tick)
 	
 	$("#red").css({top: Hero.y + "em"})
 	$("#red").css({left: Hero.x + "em"})
+	$("#red").css({zIndex: Math.floor(Hero.y)})
 	$("#camera").css({top: Camera.cy + "em"})
 	$("#camera").css({left: Camera.cx + "em"})
 
