@@ -96,6 +96,7 @@ function createRoom(rx, ry, data)
 				var tileHTML = $("<div class='wall tile'>")
 				tileHTML.css({top: y + "em"})
 				tileHTML.css({left: x + "em"})
+				tileHTML.css({zIndex: y})
 				$("#tiles").append(tileHTML)
 			}
 		}
@@ -201,9 +202,10 @@ Loop(function(tick)
     
 	Camera.cx = Math.floor(Hero.x / Room.width) * -Room.width
 	Camera.cy = Math.floor(Hero.y / Room.height) * -Room.height
-
+	
 	$("#red").css({top: Hero.y - (Hero.height / 2) + "em"})
 	$("#red").css({left: Hero.x - (Hero.width / 2) + "em"})
+	$("#red").css({zIndex: Math.floor(Hero.y)})
 	$("#camera").css({top: Camera.cy + 2 + "em"})
 	$("#camera").css({left: Camera.cx + "em"})
 	$("#menu > #map > #marker").css({top: Math.floor(Hero.y / Room.height) + "em"})
