@@ -198,8 +198,6 @@ Loop(function(tick)
         console.log("red takes damage")
     }
     
-    //console.log(Hero.x.toFixed(2) + " , " + Hero.y.toFixed(2))
-    
 	Camera.cx = Math.floor(Hero.x / Room.width) * -Room.width
 	Camera.cy = Math.floor(Hero.y / Room.height) * -Room.height
 	

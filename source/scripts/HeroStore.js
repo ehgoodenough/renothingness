@@ -8,7 +8,7 @@ module.exports = {
 	width: 0.5,
 	height: 1,
 	deacceleration: 0.5,
-	maxVelocity: 0.1,
+	maxVelocity: 0.075,
 	direction: "south",
 	update: function(tick)
 	{
