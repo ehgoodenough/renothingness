@@ -1,5 +1,3 @@
-var React = require("react")
-
 var GameFrame = React.createClass({
     getDefaultProps: function() {
         return {

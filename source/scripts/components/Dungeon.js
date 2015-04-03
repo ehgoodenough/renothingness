@@ -1,5 +1,3 @@
-var React = require("react")
-
 var Dungeon = React.createClass({
 	render: function() {
 		return (
@@ -10,7 +8,7 @@ var Dungeon = React.createClass({
 	},
 	renderTiles: function() {
 		var renderings = []
-		for(var coords in this.props.tiles) {
+		for(var coords in this.props.dungeon.tiles) {
 			var x = coords.split("-")[0]
 			var y = coords.split("-")[1]
 			renderings.push(

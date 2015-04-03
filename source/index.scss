@@ -9,21 +9,6 @@ html
 	background-color: #111;
 }
 
-.sprite
-{
-	width: 0.5em;
-	height: 1em;
-	overflow: hidden;
-	position: absolute;
-
-	border-radius: 0.2em;
-}
-
-#red
-{
-	background-color: red;
-}
-
 #blue
 {
 	top: 2em;
@@ -59,24 +44,6 @@ html
 	transition-duration: 0.5s;
 }
 
-.tile
-{
-
-	width: 1.1em;
-	height: 1.1em;
-	position: absolute;
-}
-
-.wall.tile
-{
-	background-color: Sienna;
-}
-
-.floor.tile
-{
-	background-color: PapayaWhip;
-}
-
 /*************/
 /*Game Frame*/
 /***********/
@@ -90,6 +57,8 @@ html
     margin: auto;
     position: fixed;
     overflow: hidden;
+
+		background-color: papayawhip;
 }
 
 @mixin game-frame-aspect-ratio($awidth, $aheight, $twidth, $theight)
@@ -116,47 +85,3 @@ html
 }
 
 @include game-frame-aspect-ratio(11, 9, 11, 9);
-
-/*******/
-/*Menu*/
-/*****/
-
-#menu
-{
-	top: 0em;
-	left: 0em;
-	right: 0em;
-	height: 2em;
-	padding: 0.25em;
-	position: absolute;
-
-	color: #EEE;
-	background-color: #111;
-}
-
-#menu > #map
-{
-	width: 2em;
-	height: 1.5em;
-	position: relative;
-	background-color: red;
-
-	float: left;
-	margin-right: 0.25em;
-}
-
-#menu > #map > #marker
-{
-	width: 1em;
-	height: 1em;
-
-	font-size: 0.25em;
-	position: absolute;
-
-	background-color: blue;
-}
-
-#menu > #health
-{
-
-}
