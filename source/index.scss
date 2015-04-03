@@ -10,7 +10,7 @@ html
 }
 
 .sprite
-{	
+{
 	width: 0.5em;
 	height: 1em;
 	overflow: hidden;
@@ -83,36 +83,39 @@ html
 
 #game-frame
 {
-	top: 0em;
-	left: 0em;
-	right: 0em;
-	bottom: 0em;
-	margin: auto;
-	position: fixed;
-	overflow: hidden;
-
-	background-color: PapayaWhip;
+    top: 0rem;
+    left: 0rem;
+    right: 0rem;
+    bottom: 0rem;
+    margin: auto;
+    position: fixed;
+    overflow: hidden;
 }
 
-@media(min-aspect-ratio: 1/1)
+@mixin game-frame-aspect-ratio($awidth, $aheight, $twidth, $theight)
 {
-	#game-frame
-	{
-		width: 100vh;
-		height: 100vh;
-		font-size: (100vh)/11;
-	}
+    @media(min-aspect-ratio: #{$awidth + "/" + $aheight})
+    {
+        #game-frame._#{$awidth + "x" + $aheight}
+        {
+            height: 100vh;
+            width: ($awidth/$aheight)*100vh;
+            font-size: (($awidth/$aheight)*100vh)/$twidth;
+        }
+    }
+
+    @media(max-aspect-ratio: #{$awidth + "/" + $aheight})
+    {
+        #game-frame._#{$awidth + "x" + $aheight}
+        {
+            width: 100vw;
+            height: ($aheight/$awidth)*100vw;
+            font-size: (($aheight/$awidth)*100vw)/$theight;
+        }
+    }
 }
 
-@media(max-aspect-ratio: 1/1)
-{
-	#game-frame
-	{
-		width: 100vw;
-		height: 100vw;
-		font-size: (100vw)/11;
-	}
-}
+@include game-frame-aspect-ratio(11, 9, 11, 9);
 
 /*******/
 /*Menu*/
@@ -155,5 +158,5 @@ html
 
 #menu > #health
 {
-	
+
 }

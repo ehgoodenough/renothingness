@@ -1,4 +1,6 @@
+
 var $ = require("jquery")
+var React = require("react")
 
 var Loop = require("./scripts/Loop.js")
 var Input = require("./scripts/Input.js")
@@ -13,9 +15,9 @@ var Room = {
 
 var Blue = {
 	x: 3.5,
-    y: 2.5,
-    width: 0.5,
-    height: 1
+  y: 2.5,
+  width: 0.5,
+  height: 1
 }
 
 $("#blue").css({top: Blue.y - Blue.height/2 + "em"})
@@ -39,7 +41,7 @@ function isIntersecting(a, b)
     // where x and y are anchored at the center
     // of the entity, and both position (x and y)
     // and dimensions (width and height) are in ems.
-    
+
     var ax1 = a.x - (a.width / 2)
     var ax2 = a.x + (a.width / 2)
     var ay1 = a.y - (a.height / 2)
@@ -48,12 +50,12 @@ function isIntersecting(a, b)
     var bx2 = b.x + (b.width / 2)
     var by1 = b.y - (b.height / 2)
     var by2 = b.y + (b.height / 2)
-    
+
     if(ax1 > bx2) {return false}
     if(ay1 > by2) {return false}
     if(ax2 < bx1) {return false}
     if(ay2 < by1) {return false}
-    
+
     return true
 }
 
@@ -90,13 +92,9 @@ function createRoom(rx, ry, data)
 			}
 			var tile = roomData[ty * room.width + tx]
 			if(tile == 2) {
-                var x = (rx * 11) + tx
-                var y = (ry * 9) + ty
-                tiles[x + "-" + y] = true
-				var tileHTML = $("<div class='wall tile'>")
-				tileHTML.css({top: y + "em"})
-				tileHTML.css({left: x + "em"})
-				$("#tiles").append(tileHTML)
+        var x = (rx * 11) + tx
+        var y = (ry * 9) + ty
+        tiles[x + "-" + y] = true
 			}
 		}
 	}
@@ -105,6 +103,8 @@ function createRoom(rx, ry, data)
 createRoom(0, 0, {doors: ["south"]})
 createRoom(0, 1, {doors: ["north", "east"]})
 createRoom(1, 1, {doors: ["west"]})
+
+console.log(tiles)
 
 Loop(function(tick)
 {
@@ -128,11 +128,11 @@ Loop(function(tick)
 		Hero.direction = "east"
 		Hero.vx += Hero.speed * tick
 	}
-	
+
 	if(Hero.vy > 0)
 	{
 		Hero.vy -= Hero.deacceleration * tick
-		
+
 		if(Hero.vy < 0)
 		{
 			Hero.vy = 0
@@ -141,7 +141,7 @@ Loop(function(tick)
 	else if(Hero.vy < 0)
 	{
 		Hero.vy += Hero.deacceleration * tick
-		
+
 		if(Hero.vy > 0)
 		{
 			Hero.vy = 0
@@ -150,7 +150,7 @@ Loop(function(tick)
 	if(Hero.vx > 0)
 	{
 		Hero.vx -= Hero.deacceleration * tick
-		
+
 		if(Hero.vx < 0)
 		{
 			Hero.vx = 0
@@ -159,13 +159,13 @@ Loop(function(tick)
 	else if(Hero.vx < 0)
 	{
 		Hero.vx += Hero.deacceleration * tick
-		
+
 		if(Hero.vx > 0)
 		{
 			Hero.vx = 0
 		}
 	}
-	
+
 	if(Hero.vx > Hero.maxVelocity)
 	{
 		 Hero.vx = Hero.maxVelocity
@@ -182,7 +182,7 @@ Loop(function(tick)
 	{
 		Hero.vy = -Hero.maxVelocity
 	}
-    
+
     if(!hasTile(Hero.x + Hero.vx, Hero.y))
     {
         Hero.x += Hero.vx
@@ -191,14 +191,14 @@ Loop(function(tick)
     {
         Hero.y += Hero.vy
     }
-    
+
     if(isIntersecting(Hero, Blue))
     {
         console.log("red takes damage")
     }
-    
+
     //console.log(Hero.x.toFixed(2) + " , " + Hero.y.toFixed(2))
-    
+
 	Camera.cx = Math.floor(Hero.x / Room.width) * -Room.width
 	Camera.cy = Math.floor(Hero.y / Room.height) * -Room.height
 
@@ -208,7 +208,7 @@ Loop(function(tick)
 	$("#camera").css({left: Camera.cx + "em"})
 	$("#menu > #map > #marker").css({top: Math.floor(Hero.y / Room.height) + "em"})
 	$("#menu > #map > #marker").css({left: Math.floor(Hero.x / Room.width) + "em"})
-	
+
 	if(Hero.direction == "north")
 	{
 		$("#red > img").css({top: "-2em"})
@@ -231,3 +231,18 @@ Loop(function(tick)
 		$("#menu > #health").append("!")
 	}
 })
+
+var Dungeon = require("<scripts>/components/Dungeon")
+var GameFrame = require("<scripts>/components/GameFrame")
+
+var Renothingness = React.createClass({
+	render: function() {
+		return (
+			<GameFrame aspect-ratio="11x9">
+	      <Dungeon tiles={tiles}/>
+			</GameFrame>
+		)
+	}
+})
+
+React.render(<Renothingness/>, document.body)
