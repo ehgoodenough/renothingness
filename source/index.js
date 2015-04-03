@@ -11,14 +11,14 @@ var Loop = require("<scripts>/utilities/Loop")
 var HeroStore = require("<scripts>/stores/HeroStore.js")
 var DungeonStore = require("<scripts>/stores/DungeonStore")
 
-Loop(function(tick)
-{
+Loop(function(tick) {
 	HeroStore.update(tick)
 })
 
 var Hero = require("<scripts>/components/Hero")
 var Dungeon = require("<scripts>/components/Dungeon")
 var GameFrame = require("<scripts>/components/GameFrame")
+var Camera = require("<scripts>/components/Camera")
 
 var Renothingness = React.createClass({
 	mixins: [
@@ -28,8 +28,10 @@ var Renothingness = React.createClass({
 	render: function() {
 		return (
 			<GameFrame aspect-ratio="11x9">
-	      <Dungeon dungeon={this.state.dungeon}/>
-				<Hero hero={this.state.hero}/>
+				<Camera target={this.state.hero}>
+		      <Dungeon dungeon={this.state.dungeon}/>
+					<Hero hero={this.state.hero}/>
+				</Camera>
 			</GameFrame>
 		)
 	}
