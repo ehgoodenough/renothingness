@@ -10,17 +10,8 @@ Learn more about the project at our [Trello](https://trello.com/b/rzCWqT18/proje
 
 ## Installation ##
 
-### To install our tools ###
-
-	$ choco install git
-	$ choco install node
 	$ npm install -g gulp
-	$ npm install -g jasmine-node
-
-### To install all our dependencies ###
-
 	$ npm install
-	$ bower install
 
 ## Development ##
 
