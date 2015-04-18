@@ -11,7 +11,10 @@
     "url": "https://github.com/mocsarcade/renothingness"
   },
   "dependencies": {
-    "react": "~0.13.1"
+    "react": "^0.13.1",
+    "reflux": "^0.2.7",
+    "vkey": "~1.0.0",
+    "debounce": "~1.0.0"
   },
   "devDependencies": {
     "aliasify": "~1.7.2",

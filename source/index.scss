@@ -1,160 +1,55 @@
 *
 {
-	margin: 0em;
-	box-sizing: border-box;
+    margin: 0em;
+    box-sizing: border-box;
 }
 
 html
 {
-	background-color: #111;
+    background-color: #111;
 }
 
-.sprite
-{	
-	width: 0.5em;
-	height: 1em;
-	overflow: hidden;
-	position: absolute;
-
-	border-radius: 0.2em;
-}
-
-#red
+body.resizing
 {
-	background-color: red;
+    *
+    {
+        transition: none !important;
+    }
 }
 
 #blue
 {
-	top: 2em;
-	left: 3.25em;
-	background-color: blue;
+    top: 2em;
+    left: 3.25em;
+    background-color: blue;
 }
 
 #red > img
 {
-	width: auto;
-	height: 4em;
-	position: absolute;
+    width: auto;
+    height: 4em;
+    position: absolute;
 }
 
 #red  > #sword
 {
-	left: 0.5em;
-	top: 0.5em;
-	width: 0.5em;
-	height: 0.25em;
-	position: absolute;
+    left: 0.5em;
+    top: 0.5em;
+    width: 0.5em;
+    height: 0.25em;
+    position: absolute;
 
-	background-size: contain;
-	background-repeat: no-repeat;
-	background-image: url(assets/sword.jpg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url(assets/sword.jpg);
 }
 
 #camera
 {
-	top: 0px;
-	position: absolute;
-	transition: top, left;
-	transition-duration: 0.5s;
+    top: 0px;
+    position: absolute;
+    transition: top, left;
+    transition-duration: 0.5s;
 }
 
-.tile
-{
-
-	width: 1.1em;
-	height: 1.1em;
-	position: absolute;
-}
-
-.wall.tile
-{
-	background-color: Sienna;
-}
-
-.floor.tile
-{
-	background-color: PapayaWhip;
-}
-
-/*************/
-/*Game Frame*/
-/***********/
-
-#game-frame
-{
-	top: 0em;
-	left: 0em;
-	right: 0em;
-	bottom: 0em;
-	margin: auto;
-	position: fixed;
-	overflow: hidden;
-
-	background-color: PapayaWhip;
-}
-
-@media(min-aspect-ratio: 1/1)
-{
-	#game-frame
-	{
-		width: 100vh;
-		height: 100vh;
-		font-size: (100vh)/11;
-	}
-}
-
-@media(max-aspect-ratio: 1/1)
-{
-	#game-frame
-	{
-		width: 100vw;
-		height: 100vw;
-		font-size: (100vw)/11;
-	}
-}
-
-/*******/
-/*Menu*/
-/*****/
-
-#menu
-{
-	top: 0em;
-	left: 0em;
-	right: 0em;
-	height: 2em;
-    z-index: 100;
-	padding: 0.25em;
-	position: absolute;
-
-	color: #EEE;
-	background-color: #111;
-}
-
-#menu > #map
-{
-	width: 2em;
-	height: 1.5em;
-	position: relative;
-	background-color: red;
-
-	float: left;
-	margin-right: 0.25em;
-}
-
-#menu > #map > #marker
-{
-	width: 1em;
-	height: 1em;
-
-	font-size: 0.25em;
-	position: absolute;
-
-	background-color: blue;
-}
-
-#menu > #health
-{
-	
-}
+@import "./styles/components/GameFrame.scss";

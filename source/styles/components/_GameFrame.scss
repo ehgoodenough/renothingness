@@ -1,0 +1,37 @@
+#game-frame
+{
+    top: 0rem;
+    left: 0rem;
+    right: 0rem;
+    bottom: 0rem;
+    margin: auto;
+    position: fixed;
+    overflow: hidden;
+    
+	background-color: papayawhip;
+}
+
+@mixin game-frame-aspect-ratio($awidth, $aheight, $twidth, $theight)
+{
+    @media(min-aspect-ratio: #{$awidth + "/" + $aheight})
+    {
+        #game-frame._#{$awidth + "x" + $aheight}
+        {
+            height: 100vh;
+            width: ($awidth/$aheight)*100vh;
+            font-size: (($awidth/$aheight)*100vh)/$twidth;
+        }
+    }
+
+    @media(max-aspect-ratio: #{$awidth + "/" + $aheight})
+    {
+        #game-frame._#{$awidth + "x" + $aheight}
+        {
+            width: 100vw;
+            height: ($aheight/$awidth)*100vw;
+            font-size: (($aheight/$awidth)*100vw)/$theight;
+        }
+    }
+}
+
+@include game-frame-aspect-ratio(11, 9, 11, 9);
