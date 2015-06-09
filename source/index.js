@@ -7,10 +7,12 @@ window.IsResizing = require("<scripts>/utilities/IsResizing")
 window.WIDTH = 11
 window.HEIGHT = 9
 
-var Hero = require("<scripts>/components/Hero")
-var Dungeon = require("<scripts>/components/Dungeon")
+var Input = require("<scripts>/components/Input")
 var GameFrame = require("<scripts>/components/GameFrame")
 var Camera = require("<scripts>/components/Camera")
+
+var Hero = require("<scripts>/components/Hero")
+var Dungeon = require("<scripts>/components/Dungeon")
 
 var HeroStore = require("<scripts>/stores/HeroStore")
 var DungeonStore = require("<scripts>/stores/DungeonStore")
@@ -27,6 +29,7 @@ var Renothingness = React.createClass({
                     <Dungeon dungeon={this.state["dungeon"]}/>
                     <Hero hero={this.state["hero"]}/>
                 </Camera>
+                <Input/>
             </GameFrame>
         )
     },
