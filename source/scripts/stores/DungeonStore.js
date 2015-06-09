@@ -1,41 +1,24 @@
-var DungeonRoomStore = require("<scripts>/stores/DungeonRoomStore")
+var tilemaps = [
+    require("<assets>/tilemaps/bigdot.json"),
+    require("<assets>/tilemaps/fivedots.json"),
+    require("<assets>/tilemaps/fourdots.json"),
+    require("<assets>/tilemaps/grid.json"),
+    require("<assets>/tilemaps/onedot.json")
+]
 
-var DungeonStore = Phlux.createStore("Dungeon", {
+var DungeonStore = Phlux.createStore({
     data: {
-        tiles: {
-          //tiles are put here.
-        }
+        tiles: {}
     },
-    createRoom: function(rx, ry, data)
-    {
-        var room = DungeonRoomStore.getRandomRoom()
-        var tiles = room.layers[0].data
-        for (var tx = 0; tx < room.width; tx++) {
+    createRoom: function(rx, ry, data) {
+        var room = tilemaps[0]
+        room.tiles = room.layers[0].data
+        for(var tx = 0; tx < room.width; tx++) {
             for(var ty = 0; ty < room.height; ty++) {
-                if(data.doors.indexOf("north") != -1
-                && tx == (room.width - 1) / 2
-                && ty == 0) {
-                    continue;
-                }
-                if(data.doors.indexOf("south") != -1
-                && tx == (room.width - 1) / 2
-                && ty == room.height - 1) {
-                    continue;
-                }
-                if(data.doors.indexOf("west") != -1
-                && tx == 0
-                && ty == (room.height - 1) / 2) {
-                    continue;
-                }
-                if(data.doors.indexOf("east") != -1
-                && tx == room.width - 1
-                && ty == (room.height - 1) / 2) {
-                    continue;
-                }
-                var tile_value = tiles[ty * room.width + tx]
-                if(tile_value == 2) {
-                    var x = (rx * 11) + tx
-                    var y = (ry * 9) + ty
+                var tile = room.tiles[ty * room.width + tx] - 1
+                if(tile == 1) {
+                    var x = (rx * WIDTH) + tx
+                    var y = (ry * HEIGHT) + ty
                     this.data.tiles[x + "-" + y] = {
                         "position": {
                             "x": x,

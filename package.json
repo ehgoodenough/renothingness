@@ -1,7 +1,6 @@
 {
   "name": "renothingness",
   "version": "0.0.0",
-  "main": "./build/index.html",
   "contributors": [
     "Andrew McPherson",
     "Joey Shiraef"
@@ -11,10 +10,13 @@
     "url": "https://github.com/mocsarcade/renothingness"
   },
   "dependencies": {
+    "debounce": "~1.0.0",
+    "keyb": "^1.0.4",
+    "phlux": "^1.0.2",
     "react": "^0.13.1",
     "reflux": "^0.2.7",
-    "vkey": "~1.0.0",
-    "debounce": "~1.0.0"
+    "tickly": "^1.0.1",
+    "vkey": "~1.0.0"
   },
   "devDependencies": {
     "aliasify": "~1.7.2",

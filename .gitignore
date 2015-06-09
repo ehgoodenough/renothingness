@@ -1,8 +1,6 @@
 node_modules
 bower_components
 
-deploy_key*
-
 ._*
 *.log
 .DS_Store

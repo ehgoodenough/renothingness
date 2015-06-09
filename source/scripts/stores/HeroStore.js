@@ -1,83 +1,82 @@
-var Input = require("<scripts>/utilities/Input")
 var DungeonStore = require("<scripts>/stores/DungeonStore")
 
-var HeroStore = Phlux.createStore("Hero", {
+var HeroStore = Phlux.createStore({
     data: {
-        x: 1.5,
-        y: 1.5,
-        vy: 0,
-        vx: 0,
-        speed: 3,
-        maxVelocity: 0.2,
+        position: {
+            x: 1.5,
+            y: 1.5
+        },
+        velocity: {
+            x: 0, y: 0,
+            max: 0.2
+        },
+        acceleration: 3,
         deacceleration: 1.25,
         direction: "south",
         width: 1,
         height: 1,
         health: 3
     },
-    initiateStore: function() {
-        this.on
-    },
-    moveNorth: function() {
-        this.data.direction = "north"
-        this.data.vy +=  this.data.speed * tick
-        if(this.data.vy > this.data.maxVelocity) {
-            this.data.vy = this.data.maxVelocity
-        }
-    },
-    moveSouth: function() {
-        this.data.direction = "south"
-        this.data.vy -= this.data.speed * tick
-        if(this.data.vy < -this.data.maxVelocity) {
-            this.data.vy = -this.data.maxVelocity
-        }
-    },
-    moveWest: function() {
-        this.data.direction = "west"
-        this.data.vx -= this.data.speed * tick
-        if(this.data.vx < -this.data.maxVelocity) {
-             this.data.vx = -this.data.maxVelocity
-        }
-    },
-    moveEast: function() {
-        this.data.direction = "east"
-        this.data.vx += this.data.speed * tick
-        if(this.data.vx > this.data.maxVelocity) {
-             this.data.vx = this.data.maxVelocity
-        }
-    },
-    onTick: function(tick) {
-        if(this.data.vy > 0) {
-            this.data.vy -= this.data.deacceleration * tick
-            if(this.data.vy < 0) {
-                this.data.vy = 0
-            }
-        } else if(this.data.vy < 0) {
-            this.data.vy += this.data.deacceleration * tick
-            if(this.data.vy > 0) {
-                this.data.vy = 0
+    iterate: function(tick) {
+        // Input Polling
+        if(Keyb.isDown("W") || Keyb.isDown("<up>")) {
+            this.data.direction = "north"
+            this.data.velocity.y -= this.data.acceleration * tick
+            if(this.data.velocity.y < -this.data.velocity.max) {
+                this.data.velocity.y = -this.data.velocity.max
             }
         }
-        if(this.data.vx > 0) {
-            this.data.vx -= this.data.deacceleration * tick
-            if(this.data.vx < 0) {
-                this.data.vx = 0
-            }
-        } else if(this.data.vx < 0) {
-            this.data.vx += this.data.deacceleration * tick
-            if(this.data.vx > 0) {
-                this.data.vx = 0
+        if(Keyb.isDown("S") || Keyb.isDown("<down>")) {
+            this.data.direction = "south"
+            this.data.velocity.y +=  this.data.acceleration * tick
+            if(this.data.velocity.y > this.data.velocity.max) {
+                this.data.velocity.y = this.data.velocity.max
             }
         }
-        if(!DungeonStore.hasTileAt(this.data.x + this.data.vx, this.data.y)) {
-            this.data.x += this.data.vx
+        if(Keyb.isDown("A") || Keyb.isDown("<left>")) {
+            this.data.direction = "west"
+            this.data.velocity.x -= this.data.acceleration * tick
+            if(this.data.velocity.x < -this.data.velocity.max) {
+                 this.data.velocity.x = -this.data.velocity.max
+            }
         }
-        if(!DungeonStore.hasTileAt(this.data.x, this.data.y + this.data.vy)) {
-            this.data.y += this.data.vy
+        if(Keyb.isDown("D") || Keyb.isDown("<right>")) {
+            this.data.direction = "east"
+            this.data.velocity.x += this.data.acceleration * tick
+            if(this.data.velocity.x > this.data.velocity.max) {
+                 this.data.velocity.x = this.data.velocity.max
+            }
         }
-        //if(isIntersecting(Hero, Blue)) {
-        //    console.log("red takes damage")
-        //}
+        // Collision and Translation
+        if(!DungeonStore.hasTileAt(this.data.position.x + this.data.velocity.x, this.data.position.y)) {
+            this.data.position.x += this.data.velocity.x
+        }
+        if(!DungeonStore.hasTileAt(this.data.position.x, this.data.position.y + this.data.velocity.y)) {
+            this.data.position.y += this.data.velocity.y
+        }
+        // Deacceleration
+        if(this.data.velocity.y > 0) {
+            this.data.velocity.y -= this.data.deacceleration * tick
+            if(this.data.velocity.y < 0) {
+                this.data.velocity.y = 0
+            }
+        } else if(this.data.velocity.y < 0) {
+            this.data.velocity.y += this.data.deacceleration * tick
+            if(this.data.velocity.y > 0) {
+                this.data.velocity.y = 0
+            }
+        }
+        if(this.data.velocity.x > 0) {
+            this.data.velocity.x -= this.data.deacceleration * tick
+            if(this.data.velocity.x < 0) {
+                this.data.velocity.x = 0
+            }
+        } else if(this.data.velocity.x < 0) {
+            this.data.velocity.x += this.data.deacceleration * tick
+            if(this.data.velocity.x > 0) {
+                this.data.velocity.x = 0
+            }
+        }
         this.trigger()
     }
 })

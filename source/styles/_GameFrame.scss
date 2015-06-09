@@ -7,8 +7,6 @@
     margin: auto;
     position: fixed;
     overflow: hidden;
-    
-	background-color: papayawhip;
 }
 
 @mixin game-frame-aspect-ratio($awidth, $aheight, $twidth, $theight)

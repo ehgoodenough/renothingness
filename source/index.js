@@ -1,12 +1,11 @@
 window.React = require("react")
-window.Phlux = require("<scripts>/utilities/Phlux")
+window.Keyb = require("keyb")
+window.Tickly = require("tickly")
+window.Phlux = require("phlux")
+window.IsResizing = require("<scripts>/utilities/IsResizing")
 
 window.WIDTH = 11
 window.HEIGHT = 9
-
-var Loop = require("<scripts>/utilities/Loop")
-var Input = require("<scripts>/utilities/Input")
-var Resize = require("<scripts>/utilities/Resize")
 
 var Hero = require("<scripts>/components/Hero")
 var Dungeon = require("<scripts>/components/Dungeon")
@@ -24,12 +23,17 @@ var Renothingness = React.createClass({
     render: function() {
         return (
             <GameFrame aspect-ratio="11x9">
-                <Camera target={this.state.hero}>
-                    <Dungeon dungeon={this.state.dungeon}/>
-                    <Hero hero={this.state.hero}/>
+                <Camera target={this.state["hero"]}>
+                    <Dungeon dungeon={this.state["dungeon"]}/>
+                    <Hero hero={this.state["hero"]}/>
                 </Camera>
             </GameFrame>
         )
+    },
+    componentDidMount: function() {
+        Tickly.loop(function(tick) {
+            HeroStore.iterate(tick)
+        })
     }
 })
 

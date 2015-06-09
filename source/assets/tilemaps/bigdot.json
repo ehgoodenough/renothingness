@@ -22,7 +22,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "image":"..\/Projects\/opob\/source_files\/stuff\/tileset.png",
+         "image":"tileset.png",
          "imageheight":64,
          "imagewidth":128,
          "margin":0,
@@ -33,6 +33,13 @@
             },
          "spacing":0,
          "tileheight":64,
+         "tileproperties":
+            {
+             "1":
+                {
+                 "hasCollision":"true"
+                }
+            },
          "tilewidth":64
         }],
  "tilewidth":64,

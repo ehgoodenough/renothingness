@@ -1,55 +1,13 @@
-*
-{
-    margin: 0em;
-    box-sizing: border-box;
-}
+@import "./styles/Defaults.scss";
+@import "./styles/GameFrame.scss";
+@import "./styles/IsResizing.scss";
 
 html
 {
     background-color: #111;
-}
-
-body.resizing
-{
-    *
+    
+    #game-frame
     {
-        transition: none !important;
+        background-color: #FFEFD5;
     }
 }
-
-#blue
-{
-    top: 2em;
-    left: 3.25em;
-    background-color: blue;
-}
-
-#red > img
-{
-    width: auto;
-    height: 4em;
-    position: absolute;
-}
-
-#red  > #sword
-{
-    left: 0.5em;
-    top: 0.5em;
-    width: 0.5em;
-    height: 0.25em;
-    position: absolute;
-
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-image: url(assets/sword.jpg);
-}
-
-#camera
-{
-    top: 0px;
-    position: absolute;
-    transition: top, left;
-    transition-duration: 0.5s;
-}
-
-@import "./styles/components/GameFrame.scss";
