@@ -28,28 +28,34 @@ var DungeonStore = Phlux.createStore({
                 }
             }
         }
-        /*
-        if(data.doors.indexOf("north") != -1
-        && tx == (room.width - 1) / 2
-        && ty == 0) {
-            continue;
+        if(data.doors.indexOf("north") != -1) {
+            var tx = (room.width - 1) / 2
+            var ty = 0
+            var x = (rx * WIDTH) + tx
+            var y = (ry * HEIGHT) + ty
+            delete this.data.tiles[x + "-" + y]
         }
-        if(data.doors.indexOf("south") != -1
-        && tx == (room.width - 1) / 2
-        && ty == room.height - 1) {
-            continue;
+        if(data.doors.indexOf("south") != -1) {
+            var tx = (room.width - 1) / 2
+            var ty = room.height - 1
+            var x = (rx * WIDTH) + tx
+            var y = (ry * HEIGHT) + ty
+            delete this.data.tiles[x + "-" + y]
         }
-        if(data.doors.indexOf("west") != -1
-        && tx == 0
-        && ty == (room.height - 1) / 2) {
-            continue;
+        if(data.doors.indexOf("west") != -1) {
+            var tx = 0
+            var ty = (room.height - 1) / 2
+            var x = (rx * WIDTH) + tx
+            var y = (ry * HEIGHT) + ty
+            delete this.data.tiles[x + "-" + y]
         }
-        if(data.doors.indexOf("east") != -1
-        && tx == room.width - 1
-        && ty == (room.height - 1) / 2) {
-            continue;
+        if(data.doors.indexOf("east") != -1) {
+            var tx = room.width - 1
+            var ty = (room.height - 1) / 2
+            var x = (rx * WIDTH) + tx
+            var y = (ry * HEIGHT) + ty
+            delete this.data.tiles[x + "-" + y]
         }
-        */
     },
     initiateStore: function() {
         this.createRoom(0, 0, {doors: ["south"]})
