@@ -11,10 +11,12 @@
   },
   "dependencies": {
     "debounce": "~1.0.0",
+    "hammerjs": "^2.0.4",
     "keyb": "^1.0.4",
     "phlux": "^1.0.2",
     "react": "^0.13.1",
     "reflux": "^0.2.7",
+    "seedrandom": "^2.4.0",
     "tickly": "^1.0.1",
     "vkey": "~1.0.0"
   },

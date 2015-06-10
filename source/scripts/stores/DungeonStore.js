@@ -24,7 +24,7 @@ function DunGen() {
     }
     this.getRandomPotentialDirection = function(room) {
         var directions = this.getPotentialDirections(room)
-        return directions[Math.floor(Math.random() * directions.length)]
+        return directions[Math.floor(Random() * directions.length)]
     }
     this.getOppositeDirection = function(direction) {
         return {
@@ -42,7 +42,7 @@ function DunGen() {
             doors: [],
         }
         this.addRoom(_room)
-        for(var i = 0; i < 3; i++) {
+        for(var i = 0; i < 5; i++) {
             var direction = this.getRandomPotentialDirection(_room)
             if(direction == undefined) {
                 throw "DEAD_END"

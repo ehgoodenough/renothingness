@@ -1,12 +1,4 @@
 var Camera = React.createClass({
-    propTypes: {
-        target: React.PropTypes.shape({
-            position: React.PropTypes.shape({
-                x: React.PropTypes.number.isRequired,
-                y: React.PropTypes.number.isRequired
-            })
-        }).isRequired
-    },
     render: function() {
         return (
             <div style={this.renderStyles()}>
@@ -15,16 +7,14 @@ var Camera = React.createClass({
         )
     },
     renderStyles: function() {
-        var x = (Math.floor(this.props.target.position.x / WIDTH) * WIDTH * -1) + ((WIDTH * (this.props.zoom - 1)) / 2)
-        var y = (Math.floor(this.props.target.position.y / HEIGHT) * HEIGHT * -1) + ((HEIGHT * (this.props.zoom - 1)) / 2)
-        var z = 1 / this.props.zoom
+        var x = this.props.data.position.x + this.props.data.offset.x
+        var y = this.props.data.position.y + this.props.data.offset.y
+        var z = 1 / this.props.data.z
         return {
             "top": y + "em",
             "left": x + "em",
             "fontSize": z + "em",
-            "position": "absolute",
-            "transitionDuration": "0.5s",
-            "transitionProperty": "top left fontSize"
+            "position": "absolute"
         }
     }
 })
