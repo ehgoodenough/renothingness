@@ -3,8 +3,8 @@ var DungeonStore = require("<scripts>/stores/DungeonStore")
 var HeroStore = Phlux.createStore({
     data: {
         position: {
-            x: 1.5,
-            y: 1.5
+            x: (WIDTH / 2),
+            y: (HEIGHT / 2)
         },
         velocity: {
             x: 0, y: 0,

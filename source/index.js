@@ -6,6 +6,7 @@ window.IsResizing = require("<scripts>/utilities/IsResizing")
 
 window.WIDTH = 11
 window.HEIGHT = 9
+window.TILE = 64
 
 var GameFrame = require("<scripts>/components/GameFrame")
 var Camera = require("<scripts>/components/Camera")
@@ -24,7 +25,7 @@ var Renothingness = React.createClass({
     render: function() {
         return (
             <GameFrame aspect-ratio="11x9">
-                <Camera target={this.state["hero"]} zoom={1}>
+                <Camera target={this.state["hero"]} zoom={5}>
                     <Dungeon dungeon={this.state["dungeon"]}/>
                     <Hero hero={this.state["hero"]}/>
                 </Camera>

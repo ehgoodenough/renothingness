@@ -1,38 +1,60 @@
 var Dungeon = React.createClass({
     render: function() {
         return (
-            <div id="tiles">
-                {this.renderTiles()}
+            <div>
+                {this.renderRooms()}
             </div>
         )
     },
-    renderTiles: function() {
+    renderRooms: function() {
         var renderings = []
-        for(var coords in this.props.dungeon.tiles) {
-            var tile = this.props.dungeon.tiles[coords]
+        for(var coords in this.props.dungeon.rooms) {
+            var room = this.props.dungeon.rooms[coords]
             renderings.push(
-                <DungeonWallTile key={coords} data={tile}/>
+                <DungeonRoom key={coords} data={room}/>
             )
         }
         return renderings
     }
 })
 
-var DungeonWallTile = React.createClass({
+var DungeonRoom = React.createClass({
     render: function() {
         return (
-            <div style={this.renderStyles()}/>
+            <canvas ref="canvas"
+                style={this.renderStyles()}
+                width={this.props.data.dimensions.x * TILE}
+                height={this.props.data.dimensions.y * TILE}/>
         )
     },
     renderStyles: function() {
         return {
-            width: "1.0005em",
-            height: "1.0005em",
-            position: "absolute",
-            top: this.props.data.position.y + "em",
-            left: this.props.data.position.x + "em",
-            backgroundColor: "sienna"
+            "position": "absolute",
+            "top": this.props.data.position.y + "em",
+            "left": this.props.data.position.x + "em",
+            "width": this.props.data.dimensions.x + "em",
+            "height": this.props.data.dimensions.y + "em"
         }
+    },
+    renderCanvas: function() {
+        var colors = {0: "papayawhip", 1: "sienna"}
+        var canvas = this.refs.canvas.getDOMNode().getContext("2d")
+        for(var coords in this.props.data.tiles) {
+            var tile = this.props.data.tiles[coords]
+            canvas.fillStyle = colors[tile.value]
+            var r_x = tile.position.r_x * 64
+            var r_y = tile.position.r_y * 64
+            canvas.fillRect(r_x, r_y, 64, 64)
+        }
+    },
+    componentDidMount: function() {
+        this.renderCanvas()
+    },
+    shouldComponentUpdate: function(props) {
+        return false
+    },
+    componentDidUpdate: function() {
+        this.renderCanvas()
     }
 })
 
