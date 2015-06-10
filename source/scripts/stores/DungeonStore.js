@@ -6,12 +6,79 @@ var tilemaps = [
     require("<assets>/tilemaps/onedot.json")
 ]
 
+function DunGen() {
+    this.rooms = {}
+    this.getRoom = function(rx, ry) {
+        return this.rooms[rx + "x" + ry]
+    }
+    this.addRoom = function(room) {
+        this.rooms[room.rx + "x" + room.ry] = room
+    }
+    this.getPotentialDirections = function(room) {
+        var directions = []
+        if(this.getRoom(room.rx, room.ry - 1) == undefined) {directions.push({rx: 0, ry: -1})}
+        if(this.getRoom(room.rx, room.ry + 1) == undefined) {directions.push({rx: 0, ry: +1})}
+        if(this.getRoom(room.rx - 1, room.ry) == undefined) {directions.push({rx: -1, ry: 0})}
+        if(this.getRoom(room.rx + 1, room.ry) == undefined) {directions.push({rx: +1, ry: 0})}
+        return directions
+    }
+    this.getRandomPotentialDirection = function(room) {
+        var directions = this.getPotentialDirections(room)
+        return directions[Math.floor(Math.random() * directions.length)]
+    }
+    this.getOppositeDirection = function(direction) {
+        return {
+            rx: direction.rx * -1 || 0,
+            ry: direction.ry * -1 || 0
+        }
+    }
+    
+    //https://github.com/ehgoodenough/nothingness/blob/master/Adventure/src/computc/worlds/dungeons/RandomDungeon.java
+    //https://docs.google.com/presentation/d/1IRwMKnjM9VkgwLoavbJ_QBpBY3-LRetdivag1VuPry4/edit#slide=id.g41ff5289a_019
+    
+    this.generateDungeon = function() {
+        var _room = {
+            rx: 0, ry: 0,
+            doors: [],
+        }
+        this.addRoom(_room)
+        for(var i = 0; i < 3; i++) {
+            var direction = this.getRandomPotentialDirection(_room)
+            if(direction == undefined) {
+                throw "DEAD_END"
+            }
+            _room.critpath = direction
+            _room.doors.push(direction)
+            
+            var oppdirection = this.getOppositeDirection(direction)
+            var next_room = {
+                rx: _room.rx + direction.rx,
+                ry: _room.ry + direction.ry,
+                doors: [oppdirection]
+            }
+            this.addRoom(next_room)
+            _room = next_room
+        }
+    }
+    
+    this.generateDungeon()
+}
+
 var DungeonStore = Phlux.createStore({
     data: {
         rooms: {},
         tiles: {}
     },
-    createRoom: function(rx, ry, map, config) {
+    initiateStore: function() {
+        var dungeon = new DunGen()
+        
+        for(var coords in dungeon.rooms) {
+            var room = dungeon.rooms[coords]
+            this.createRoom(room.rx, room.ry, room.doors)
+        }
+    },
+    createRoom: function(rx, ry, doors) {
+        var map = tilemaps[2]
         var room = {
             position: {
                 "rx": rx,
@@ -23,7 +90,7 @@ var DungeonStore = Phlux.createStore({
                 "x": map.width || WIDTH,
                 "y": map.height || HEIGHT
             },
-            doors: config.doors || []
+            doors: doors || []
         }
         // Add tiles to the room
         room.tiles = {}
@@ -47,31 +114,32 @@ var DungeonStore = Phlux.createStore({
                 this.data.tiles[x + "x" + y] = tile
             }
         }
+        
         // Change some tiles into doors
-        if(room.doors.indexOf("north") != -1) {
-            var x = (room.dimensions.x - 1) / 2
-            room.tiles[x + "x" + 0].value = 0
-        } if(room.doors.indexOf("south") != -1) {
-            var x = (room.dimensions.x - 1) / 2
-            var y = room.dimensions.y - 1
-            room.tiles[x + "x" + y].value = 0
-        } if(room.doors.indexOf("west") != -1) {
-            var y = (room.dimensions.y - 1) / 2
-            room.tiles[0 + "x" + y].value = 0
-        } if(room.doors.indexOf("east") != -1) {
-            var x = room.dimensions.x - 1
-            var y = (room.dimensions.y - 1) / 2
-            room.tiles[x + "x" + y].value = 0
+        for(var index in room.doors) {
+            var door = room.doors[index]
+            if(door.rx == 0 && door.ry == -1) {
+                var x = (room.dimensions.x - 1) / 2
+                room.tiles[x + "x" + 0].value = 0
+            } else if(door.rx == 0 && door.ry == +1) {
+                var x = (room.dimensions.x - 1) / 2
+                var y = room.dimensions.y - 1
+                room.tiles[x + "x" + y].value = 0
+            } else if(door.rx == -1 && door.ry == 0) {
+                var y = (room.dimensions.y - 1) / 2
+                room.tiles[0 + "x" + y].value = 0
+            } else if(door.rx == +1 && door.ry == 0) {
+                var x = room.dimensions.x - 1
+                var y = (room.dimensions.y - 1) / 2
+                room.tiles[x + "x" + y].value = 0
+            }
         }
+        
         // Save to the dungeon
         var rx = room.position.rx
         var ry = room.position.ry
         this.data.rooms[rx + "x" + ry] = room
-    },
-    initiateStore: function() {
-        this.createRoom(0, 0, tilemaps[3], {doors: ["south"]})
-        this.createRoom(0, 1, tilemaps[0], {doors: ["north", "east"]})
-        this.createRoom(1, 1, tilemaps[2], {doors: ["west"]})
+        return room
     },
     hasTileAt: function(x, y) {
         var x = Math.floor(x)
