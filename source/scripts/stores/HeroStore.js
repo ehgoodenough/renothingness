@@ -2,81 +2,74 @@ var DungeonStore = require("<scripts>/stores/DungeonStore")
 
 var HeroStore = Phlux.createStore({
     data: {
-        position: {
-            x: (WIDTH / 2),
-            y: (HEIGHT / 2)
+        target: {
+            position: {
+                "rx": 0,
+                "ry": 0
+            }
         },
-        velocity: {
-            x: 0, y: 0,
-            max: 0.2
+        entity: {
+            position: {
+                "x": 0,
+                "y": 0
+            }
         },
-        acceleration: 3,
-        deacceleration: 1.25,
-        direction: "south",
-        width: 1,
-        height: 1,
-        health: 3
+        camera: {
+            position: {
+                "rx": 0,
+                "ry": 0
+            },
+            zoom: 1,
+            speed: 2
+        }
     },
-    iterate: function(tick) {
-        // Input Polling
-        if(Keyb.isDown("W") || Keyb.isDown("<up>")) {
-            this.data.direction = "north"
-            this.data.velocity.y -= this.data.acceleration * tick
-            if(this.data.velocity.y < -this.data.velocity.max) {
-                this.data.velocity.y = -this.data.velocity.max
+    update: function(tick) {
+        var hero = this.data
+        var room = DungeonStore.getRoom(hero.target.position)
+        
+        if(Keyb.isJustDown("W")
+        || Keyb.isJustDown("<up>")) {
+            if(room.doors.indexOf("north") != -1) {
+                hero.target.position.ry -= 1
             }
-        }
-        if(Keyb.isDown("S") || Keyb.isDown("<down>")) {
-            this.data.direction = "south"
-            this.data.velocity.y +=  this.data.acceleration * tick
-            if(this.data.velocity.y > this.data.velocity.max) {
-                this.data.velocity.y = this.data.velocity.max
+        } if(Keyb.isJustDown("S")
+        || Keyb.isJustDown("<down>")) {
+            if(room.doors.indexOf("south") != -1) {
+                hero.target.position.ry += 1
             }
-        }
-        if(Keyb.isDown("A") || Keyb.isDown("<left>")) {
-            this.data.direction = "west"
-            this.data.velocity.x -= this.data.acceleration * tick
-            if(this.data.velocity.x < -this.data.velocity.max) {
-                 this.data.velocity.x = -this.data.velocity.max
+        } if(Keyb.isJustDown("A")
+        || Keyb.isJustDown("<left>")) {
+            if(room.doors.indexOf("west") != -1) {
+                hero.target.position.rx -= 1
             }
-        }
-        if(Keyb.isDown("D") || Keyb.isDown("<right>")) {
-            this.data.direction = "east"
-            this.data.velocity.x += this.data.acceleration * tick
-            if(this.data.velocity.x > this.data.velocity.max) {
-                 this.data.velocity.x = this.data.velocity.max
+        } if(Keyb.isJustDown("D")
+        || Keyb.isJustDown("<right>")) {
+            if(room.doors.indexOf("east") != -1) {
+                hero.target.position.rx += 1
             }
+        } if(Keyb.isJustDown("<space>")) {
+            hero.camera.zoom += 1
         }
-        // Collision and Translation
-        if(!DungeonStore.hasTileAt(this.data.position.x + this.data.velocity.x, this.data.position.y)) {
-            this.data.position.x += this.data.velocity.x
-        }
-        if(!DungeonStore.hasTileAt(this.data.position.x, this.data.position.y + this.data.velocity.y)) {
-            this.data.position.y += this.data.velocity.y
-        }
-        // Deacceleration
-        if(this.data.velocity.y > 0) {
-            this.data.velocity.y -= this.data.deacceleration * tick
-            if(this.data.velocity.y < 0) {
-                this.data.velocity.y = 0
+        
+        hero.target.position.x = hero.target.position.rx * RWIDTH
+        hero.target.position.y = hero.target.position.ry * RHEIGHT
+        hero.camera.position.x = hero.target.position.x
+        hero.camera.position.y = hero.target.position.y
+        
+        /*if(hero.camera.position.x != hero.target.position.x) {
+            if(Math.abs((hero.target.position.x - hero.camera.position.x) / 2) > 0.1) {
+                hero.camera.position.x += (hero.target.position.x - hero.camera.position.x) / 2
+            } else {
+                hero.camera.position.x = hero.target.position.x
             }
-        } else if(this.data.velocity.y < 0) {
-            this.data.velocity.y += this.data.deacceleration * tick
-            if(this.data.velocity.y > 0) {
-                this.data.velocity.y = 0
+        } if(hero.camera.position.y != hero.target.position.y) {
+            if(Math.abs((hero.target.position.y - hero.camera.position.y) / 2) > 0.1) {
+                hero.camera.position.y += (hero.target.position.y - hero.camera.position.y) / 2
+            } else {
+                hero.camera.position.y = hero.target.position.y
             }
-        }
-        if(this.data.velocity.x > 0) {
-            this.data.velocity.x -= this.data.deacceleration * tick
-            if(this.data.velocity.x < 0) {
-                this.data.velocity.x = 0
-            }
-        } else if(this.data.velocity.x < 0) {
-            this.data.velocity.x += this.data.deacceleration * tick
-            if(this.data.velocity.x > 0) {
-                this.data.velocity.x = 0
-            }
-        }
+        }*/
+        
         this.trigger()
     }
 })

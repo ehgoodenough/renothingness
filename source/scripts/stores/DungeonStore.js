@@ -16,10 +16,10 @@ function DunGen() {
     }
     this.getPotentialDirections = function(room) {
         var directions = []
-        if(this.getRoom(room.rx, room.ry - 1) == undefined) {directions.push({rx: 0, ry: -1})}
-        if(this.getRoom(room.rx, room.ry + 1) == undefined) {directions.push({rx: 0, ry: +1})}
-        if(this.getRoom(room.rx - 1, room.ry) == undefined) {directions.push({rx: -1, ry: 0})}
-        if(this.getRoom(room.rx + 1, room.ry) == undefined) {directions.push({rx: +1, ry: 0})}
+        if(this.getRoom(room.rx, room.ry - 1) == undefined) {directions.push("north")}
+        if(this.getRoom(room.rx, room.ry + 1) == undefined) {directions.push("south")}
+        if(this.getRoom(room.rx - 1, room.ry) == undefined) {directions.push("west")}
+        if(this.getRoom(room.rx + 1, room.ry) == undefined) {directions.push("east")}
         return directions
     }
     this.getRandomPotentialDirection = function(room) {
@@ -27,9 +27,14 @@ function DunGen() {
         return directions[Math.floor(Random() * directions.length)]
     }
     this.getOppositeDirection = function(direction) {
-        return {
-            rx: direction.rx * -1 || 0,
-            ry: direction.ry * -1 || 0
+        if(direction == "north") {
+            return "south"
+        } else if(direction == "south") {
+            return "north"
+        } else if(direction == "west") {
+            return "east"
+        } else if(direction == "east") {
+            return "west"
         }
     }
     
@@ -50,11 +55,19 @@ function DunGen() {
             _room.critpath = direction
             _room.doors.push(direction)
             
-            var oppdirection = this.getOppositeDirection(direction)
-            var next_room = {
-                rx: _room.rx + direction.rx,
-                ry: _room.ry + direction.ry,
-                doors: [oppdirection]
+            var next_room = {doors: [this.getOppositeDirection(direction)]}
+            if(direction == "north") {
+                next_room.rx = _room.rx
+                next_room.ry = _room.ry - 1
+            } else if(direction == "south") {
+                next_room.rx = _room.rx
+                next_room.ry = _room.ry + 1
+            } else if(direction == "west") {
+                next_room.rx = _room.rx - 1
+                next_room.ry = _room.ry
+            } else if(direction == "east") {
+                next_room.rx = _room.rx + 1
+                next_room.ry = _room.ry
             }
             this.addRoom(next_room)
             _room = next_room
@@ -118,17 +131,17 @@ var DungeonStore = Phlux.createStore({
         // Change some tiles into doors
         for(var index in room.doors) {
             var door = room.doors[index]
-            if(door.rx == 0 && door.ry == -1) {
+            if(door == "north") {
                 var x = (room.dimensions.x - 1) / 2
                 room.tiles[x + "x" + 0].value = 0
-            } else if(door.rx == 0 && door.ry == +1) {
+            } else if(door == "south") {
                 var x = (room.dimensions.x - 1) / 2
                 var y = room.dimensions.y - 1
                 room.tiles[x + "x" + y].value = 0
-            } else if(door.rx == -1 && door.ry == 0) {
+            } else if(door == "west") {
                 var y = (room.dimensions.y - 1) / 2
                 room.tiles[0 + "x" + y].value = 0
-            } else if(door.rx == +1 && door.ry == 0) {
+            } else if(door == "east") {
                 var x = room.dimensions.x - 1
                 var y = (room.dimensions.y - 1) / 2
                 room.tiles[x + "x" + y].value = 0
@@ -140,6 +153,11 @@ var DungeonStore = Phlux.createStore({
         var ry = room.position.ry
         this.data.rooms[rx + "x" + ry] = room
         return room
+    },
+    getRoom: function(position) {
+        var rx = position.rx
+        var ry = position.ry
+        return this.data.rooms[rx + "x" + ry]
     },
     hasTileAt: function(x, y) {
         var x = Math.floor(x)
