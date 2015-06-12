@@ -19,8 +19,7 @@ var HeroStore = Phlux.createStore({
                 "rx": 0,
                 "ry": 0
             },
-            zoom: 3,
-            speed: 2
+            zoom: 7
         }
     },
     update: function(tick) {
@@ -29,22 +28,22 @@ var HeroStore = Phlux.createStore({
         
         if(Keyb.isJustDown("W")
         || Keyb.isJustDown("<up>")) {
-            if(room.doors.indexOf("north") != -1) {
+            if(room.hasDoor("NORTH")) {
                 hero.target.position.ry -= 1
             }
         } if(Keyb.isJustDown("S")
         || Keyb.isJustDown("<down>")) {
-            if(room.doors.indexOf("south") != -1) {
+            if(room.hasDoor("SOUTH")) {
                 hero.target.position.ry += 1
             }
         } if(Keyb.isJustDown("A")
         || Keyb.isJustDown("<left>")) {
-            if(room.doors.indexOf("west") != -1) {
+            if(room.hasDoor("WEST")) {
                 hero.target.position.rx -= 1
             }
         } if(Keyb.isJustDown("D")
         || Keyb.isJustDown("<right>")) {
-            if(room.doors.indexOf("east") != -1) {
+            if(room.hasDoor("EAST")) {
                 hero.target.position.rx += 1
             }
         }

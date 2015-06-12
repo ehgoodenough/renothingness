@@ -1,166 +1,182 @@
-var tilemaps = [
-    require("<assets>/tilemaps/bigdot.json"),
-    require("<assets>/tilemaps/fivedots.json"),
-    require("<assets>/tilemaps/fourdots.json"),
-    require("<assets>/tilemaps/grid.json"),
-    require("<assets>/tilemaps/onedot.json")
+var tilemap = require("<assets>/tilemaps/empty.json")
+
+var Directions = {
+    NORTH: {
+        rx: 0,
+        ry: -1,
+        key: "NORTH",
+        getOpposite: function() {
+            return Directions.SOUTH
+        }
+    },
+    SOUTH: {
+        rx: 0,
+        ry: +1,
+        key: "SOUTH",
+        getOpposite: function() {
+            return Directions.NORTH
+        }
+    },
+    WEST: {
+        rx: -1,
+        ry: 0,
+        key: "WEST",
+        getOpposite: function() {
+            return Directions.EAST
+        }
+    },
+    EAST: {
+        rx: +1,
+        ry: 0,
+        key: "EAST",
+        getOpposite: function() {
+            return Directions.WEST
+        }
+    }
+}
+
+var Tile = function(dungeon, room, tile) {
+    this.room = room
+    this.dungeon = dungeon
+    
+    this.value = tile.value
+    
+    this.r_x = tile.r_x
+    this.r_y = tile.r_y
+    
+    this.rx = this.room.rx
+    this.ry = this.room.ry
+    this.x = this.room.x + this.r_x
+    this.y = this.room.y + this.r_y
+    
+    this.room.tiles[this.r_x + "x" + this.r_y] = this
+    this.dungeon.tiles[this.x + "x" + this.y] = this
+}
+
+var Room = function(dungeon, room) {
+    this.rx = room.rx || 0
+    this.ry = room.ry || 0
+    
+    this.width = RWIDTH
+    this.height = RHEIGHT
+    
+    this.x = this.rx * this.width,
+    this.y = this.ry * this.height
+    
+    this.doors = room.doors || []
+    
+    this.dungeon = dungeon
+    this.dungeon.rooms[this.rx + "x" + this.ry] = this
+    
+    this.getPotentialDirections = function() {
+        var directions = []
+        for(var key in Directions) {
+            var direction = Directions[key]
+            var rx = this.rx + direction.rx
+            var ry = this.ry + direction.ry
+            if(!this.dungeon.hasRoom(rx, ry)) {
+                directions.push(direction)
+            }
+        }
+        return directions
+    }
+    
+    this.getRandomPotentialDirection = function() {
+        var directions = this.getPotentialDirections()
+        return directions[Math.floor(Random() * directions.length)]
+    }
+    
+    this.makeRandomAdjacentRoom = function() {
+        var direction = this.getRandomPotentialDirection()
+        if(direction == undefined) {throw new Error("DEAD_END")}
+        this.doors.push({"direction": direction})
+        return new Room(this.dungeon, {
+            "rx": this.rx + direction.rx,
+            "ry": this.ry + direction.ry,
+            "doors": [{
+                "direction": direction.getOpposite()
+            }]
+        })
+    }
+    
+    this.makeTiles = function() {
+        this.tiles = new Object()
+        for(var r_x = 0; r_x < this.width; r_x++) {
+            for(var r_y = 0; r_y < this.height; r_y++) {
+                var value = tilemap.layers[0].data[r_y * tilemap.width + r_x] - 1
+                var tile = new Tile(this.dungeon, this, {
+                    "value": value,
+                    "r_x": r_x,
+                    "r_y": r_y
+                })
+            }
+        }
+        
+        // change some tiles into doors
+        for(var index in this.doors) {
+            var door = this.doors[index]
+            var x = (this.width - 1) / 2
+            var y = (this.height - 1) / 2
+            x += x * door.direction.rx
+            y += y * door.direction.ry
+            this.tiles[x + "x" + y].value = 0
+        }
+    }
+}
+
+var DungeonColors = [
+    {0: "papayawhip", 1: "sienna"},
+    {0: "indianred", 1: "firebrick"},
+    {0: "darkolivegreen", 1: "darkgreen"}
 ]
 
-function DunGen() {
-    this.rooms = {}
+var Dungeon = function() {
+    
+    this.rooms = new Object()
+    this.tiles = new Object()
+    
     this.getRoom = function(rx, ry) {
         return this.rooms[rx + "x" + ry]
     }
-    this.addRoom = function(room) {
-        this.rooms[room.rx + "x" + room.ry] = room
+    this.getRooms = function() {
+        return this.rooms
     }
-    this.getPotentialDirections = function(room) {
-        var directions = []
-        if(this.getRoom(room.rx, room.ry - 1) == undefined) {directions.push("north")}
-        if(this.getRoom(room.rx, room.ry + 1) == undefined) {directions.push("south")}
-        if(this.getRoom(room.rx - 1, room.ry) == undefined) {directions.push("west")}
-        if(this.getRoom(room.rx + 1, room.ry) == undefined) {directions.push("east")}
-        return directions
-    }
-    this.getRandomPotentialDirection = function(room) {
-        var directions = this.getPotentialDirections(room)
-        return directions[Math.floor(Random() * directions.length)]
-    }
-    this.getOppositeDirection = function(direction) {
-        if(direction == "north") {
-            return "south"
-        } else if(direction == "south") {
-            return "north"
-        } else if(direction == "west") {
-            return "east"
-        } else if(direction == "east") {
-            return "west"
-        }
+    this.hasRoom = function(rx, ry) {
+        return this.rooms[rx + "x" + ry] != undefined
     }
     
     //https://github.com/ehgoodenough/nothingness/blob/master/Adventure/src/computc/worlds/dungeons/RandomDungeon.java
     //https://docs.google.com/presentation/d/1IRwMKnjM9VkgwLoavbJ_QBpBY3-LRetdivag1VuPry4/edit#slide=id.g41ff5289a_019
     
-    this.generateDungeon = function() {
-        var _room = {
-            rx: 0, ry: 0,
-            doors: [],
-        }
-        this.addRoom(_room)
-        for(var i = 0; i < 5; i++) {
-            var direction = this.getRandomPotentialDirection(_room)
-            if(direction == undefined) {
-                throw "DEAD_END"
-            }
-            _room.critpath = direction
-            _room.doors.push(direction)
-            
-            var next_room = {doors: [this.getOppositeDirection(direction)]}
-            if(direction == "north") {
-                next_room.rx = _room.rx
-                next_room.ry = _room.ry - 1
-            } else if(direction == "south") {
-                next_room.rx = _room.rx
-                next_room.ry = _room.ry + 1
-            } else if(direction == "west") {
-                next_room.rx = _room.rx - 1
-                next_room.ry = _room.ry
-            } else if(direction == "east") {
-                next_room.rx = _room.rx + 1
-                next_room.ry = _room.ry
-            }
-            this.addRoom(next_room)
-            _room = next_room
-        }
+    // make the intial room
+    var iteratorRoom = new Room(this, {"rx": 0, "ry": 0})
+    iteratorRoom.isInitialRoom = true
+    
+    // make all the other rooms
+    for(var iterator = 0; iterator < 3; iterator++) {
+        iteratorRoom = iteratorRoom.makeRandomAdjacentRoom()
     }
     
-    this.generateDungeon()
+    // make the final room
+    var iteratorRoom = iteratorRoom.makeRandomAdjacentRoom()
+    iteratorRoom.isFinalRoom = true
+    
+    // generate tiles for these rooms
+    for(var coords in this.rooms) {
+        var room = this.rooms[coords]
+        room.makeTiles()
+    }
 }
 
+
+
+
 var DungeonStore = Phlux.createStore({
-    data: {
-        rooms: {},
-        tiles: {}
-    },
     initiateStore: function() {
-        var dungeon = new DunGen()
-        
-        for(var coords in dungeon.rooms) {
-            var room = dungeon.rooms[coords]
-            this.createRoom(room.rx, room.ry, room.doors)
-        }
+        this.data = new Dungeon()
     },
-    createRoom: function(rx, ry, doors) {
-        var map = tilemaps[2]
-        var room = {
-            position: {
-                "rx": rx,
-                "ry": ry,
-                "x": rx * WIDTH,
-                "y": ry * HEIGHT
-            },
-            dimensions: {
-                "x": map.width || WIDTH,
-                "y": map.height || HEIGHT
-            },
-            doors: doors || []
-        }
-        // Add tiles to the room
-        room.tiles = {}
-        for(var r_x = 0; r_x < map.width; r_x++) {
-            for(var r_y = 0; r_y < map.height; r_y++) {
-                var value = map.layers[0].data[r_y * map.width + r_x] - 1
-                var x = rx * WIDTH + r_x
-                var y = ry * HEIGHT + r_y
-                var tile = {
-                    "value": value,
-                    "position": {
-                        "r_x": r_x,
-                        "r_y": r_y,
-                        "x": x,
-                        "y": y,
-                        "rx": rx,
-                        "ry": ry
-                    }
-                }
-                room.tiles[r_x + "x" + r_y] = tile
-                this.data.tiles[x + "x" + y] = tile
-            }
-        }
-        
-        // Change some tiles into doors
-        for(var index in room.doors) {
-            var door = room.doors[index]
-            if(door == "north") {
-                var x = (room.dimensions.x - 1) / 2
-                room.tiles[x + "x" + 0].value = 0
-            } else if(door == "south") {
-                var x = (room.dimensions.x - 1) / 2
-                var y = room.dimensions.y - 1
-                room.tiles[x + "x" + y].value = 0
-            } else if(door == "west") {
-                var y = (room.dimensions.y - 1) / 2
-                room.tiles[0 + "x" + y].value = 0
-            } else if(door == "east") {
-                var x = room.dimensions.x - 1
-                var y = (room.dimensions.y - 1) / 2
-                room.tiles[x + "x" + y].value = 0
-            }
-        }
-        
-        // Save to the dungeon
-        var rx = room.position.rx
-        var ry = room.position.ry
-        this.data.rooms[rx + "x" + ry] = room
-        return room
-    },
-    getRoom: function(position) {
-        return this.data.rooms[position.rx + "x" + position.ry]
-    },
-    hasTileAt: function(x, y) {
-        var x = Math.floor(x)
-        var y = Math.floor(y)
-        return this.data.tiles[x + "x" + y].value == 1
+    getRoom: function(rx, ry) {
+        return this.data.rooms[rx + "x" + ry]
     }
 })
 

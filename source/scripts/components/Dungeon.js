@@ -23,17 +23,17 @@ var DungeonRoom = React.createClass({
         return (
             <canvas ref="canvas"
                 style={this.renderStyles()}
-                width={this.props.data.dimensions.x * TILE}
-                height={this.props.data.dimensions.y * TILE}/>
+                width={this.props.data.width * 64}
+                height={this.props.data.height * 64}/>
         )
     },
     renderStyles: function() {
         return {
             "position": "absolute",
-            "top": this.props.data.position.y + "em",
-            "left": this.props.data.position.x + "em",
-            "width": this.props.data.dimensions.x + "em",
-            "height": this.props.data.dimensions.y + "em"
+            "top": this.props.data.y + "em",
+            "left": this.props.data.x + "em",
+            "width": this.props.data.width + "em",
+            "height": this.props.data.height + "em"
         }
     },
     renderCanvas: function() {
@@ -42,9 +42,7 @@ var DungeonRoom = React.createClass({
         for(var coords in this.props.data.tiles) {
             var tile = this.props.data.tiles[coords]
             canvas.fillStyle = colors[tile.value]
-            var r_x = tile.position.r_x * 64
-            var r_y = tile.position.r_y * 64
-            canvas.fillRect(r_x, r_y, 64, 64)
+            canvas.fillRect(tile.r_x * 64, tile.r_y * 64, 64, 64)
         }
     },
     componentDidMount: function() {

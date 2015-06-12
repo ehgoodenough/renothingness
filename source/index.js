@@ -4,7 +4,7 @@ window.Tickly = require("tickly")
 window.Phlux = require("phlux")
 window.Keyb = require("keyb")
 window.vkey = require("vkey")
-window.Random = require("seedrandom")(1433948752889)
+window.Random = require("seedrandom")(Date.now())
 window.IsResizing = require("<scripts>/utilities/IsResizing")
 
 window.WIDTH = 11
