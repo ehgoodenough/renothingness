@@ -19,7 +19,7 @@ var HeroStore = Phlux.createStore({
                 "rx": 0,
                 "ry": 0
             },
-            zoom: 1,
+            zoom: 3,
             speed: 2
         }
     },
@@ -47,28 +47,14 @@ var HeroStore = Phlux.createStore({
             if(room.doors.indexOf("east") != -1) {
                 hero.target.position.rx += 1
             }
-        } if(Keyb.isJustDown("<space>")) {
-            hero.camera.zoom += 1
         }
         
-        hero.target.position.x = hero.target.position.rx * RWIDTH
-        hero.target.position.y = hero.target.position.ry * RHEIGHT
-        hero.camera.position.x = hero.target.position.x
-        hero.camera.position.y = hero.target.position.y
+        hero.camera.position.rx = hero.target.position.rx
+        hero.camera.position.ry = hero.target.position.ry
         
-        /*if(hero.camera.position.x != hero.target.position.x) {
-            if(Math.abs((hero.target.position.x - hero.camera.position.x) / 2) > 0.1) {
-                hero.camera.position.x += (hero.target.position.x - hero.camera.position.x) / 2
-            } else {
-                hero.camera.position.x = hero.target.position.x
-            }
-        } if(hero.camera.position.y != hero.target.position.y) {
-            if(Math.abs((hero.target.position.y - hero.camera.position.y) / 2) > 0.1) {
-                hero.camera.position.y += (hero.target.position.y - hero.camera.position.y) / 2
-            } else {
-                hero.camera.position.y = hero.target.position.y
-            }
-        }*/
+        if(Keyb.isJustDown("<space>")) {
+            hero.camera.zoom += 1
+        }
         
         this.trigger()
     }

@@ -155,9 +155,7 @@ var DungeonStore = Phlux.createStore({
         return room
     },
     getRoom: function(position) {
-        var rx = position.rx
-        var ry = position.ry
-        return this.data.rooms[rx + "x" + ry]
+        return this.data.rooms[position.rx + "x" + position.ry]
     },
     hasTileAt: function(x, y) {
         var x = Math.floor(x)
