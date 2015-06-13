@@ -33,7 +33,8 @@ var Renothingness = React.createClass({
         return (
             <GameFrame aspect-ratio="11x9">
                 <Camera data={this.state["hero"]}>
-                    <Dungeon dungeon={this.state["dungeon"]}/>
+                    <Dungeon data={this.state["dungeon"]}/>
+                    <Hero data={this.state["hero"]}/>
                 </Camera>
             </GameFrame>
         )

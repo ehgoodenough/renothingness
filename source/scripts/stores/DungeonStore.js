@@ -1,5 +1,3 @@
-var tilemap = require("<assets>/tilemaps/empty.json")
-
 var Directions = {
     NORTH: {
         rx: 0,
@@ -35,6 +33,8 @@ var Directions = {
     }
 }
 
+var tilemap = require("<assets>/tilemaps/empty.json")
+
 var Tile = function(dungeon, room, tile) {
     this.room = room
     this.dungeon = dungeon
@@ -54,20 +54,26 @@ var Tile = function(dungeon, room, tile) {
 }
 
 var Room = function(dungeon, room) {
-    this.rx = room.rx || 0
-    this.ry = room.ry || 0
-    
+    this.rx = 0
+    this.ry = 0
+    this.tiles = {}
+    this.directions = {}
     this.width = RWIDTH
     this.height = RHEIGHT
+    
+    for(var key in room) {
+        this[key] = room[key]
+    }
     
     this.x = this.rx * this.width,
     this.y = this.ry * this.height
     
-    this.tiles = {}
-    this.directions = room.directions || []
-    
     this.dungeon = dungeon
     this.dungeon.rooms[this.rx + "x" + this.ry] = this
+    
+    this.hasDirection = function(key) {
+        return this.directions.indexOf(Directions[key]) != -1
+    }
     
     this.getAdjacentDirections = function() {
         var directions = []
@@ -123,10 +129,11 @@ var Room = function(dungeon, room) {
     }
 }
 
-var DungeonColors = [
+var Colors = [
     {0: "papayawhip", 1: "sienna"},
     {0: "indianred", 1: "firebrick"},
-    {0: "darkolivegreen", 1: "darkgreen"}
+    {0: "darkolivegreen", 1: "darkgreen"},
+    {0: "blue", 1: "darkblue"}
 ]
 
 var Dungeon = function() {
@@ -153,7 +160,6 @@ var Dungeon = function() {
     }
 }
 
-
 //https://github.com/ehgoodenough/nothingness/blob/master/Adventure/src/computc/worlds/dungeons/RandomDungeon.java
 //https://docs.google.com/presentation/d/1IRwMKnjM9VkgwLoavbJ_QBpBY3-LRetdivag1VuPry4/edit#slide=id.g41ff5289a_019
 
@@ -164,24 +170,24 @@ dungeon.makeRoom({
     "isInitialRoom": true,
     "directions": [
         Directions.SOUTH //critpath
-    ]
-    //pink
+    ],
+    "colors": Colors[0],
 })
 dungeon.makeRoom({
     "rx": 0, "ry": 1,
     "directions": [
         Directions.NORTH,
         Directions.WEST //critpath
-    ]
-    //pink
+    ],
+    "colors": Colors[0],
 })
 dungeon.makeRoom({
     "rx": -1, "ry": 1,
     "directions": [
         Directions.EAST,
         Directions.SOUTH //critpath
-    ]
-    //pink
+    ],
+    "colors": Colors[0],
     //has 4 pots
 })
 dungeon.makeRoom({
@@ -191,24 +197,24 @@ dungeon.makeRoom({
         Directions.SOUTH, //critpath
         Directions.EAST,
         Directions.WEST
-    ]
-    //pink
+    ],
+    "colors": Colors[0],
     //has 4 pots
 })
 dungeon.makeRoom({
     "rx": 0, "ry": 2,
     "directions": [
         Directions.WEST
-    ]
-    //pink
+    ],
+    "colors": Colors[0],
     //has chest
 })
 dungeon.makeRoom({
     "rx": -2, "ry": 2,
     "directions": [
         Directions.EAST
-    ]
-    //pink
+    ],
+    "colors": Colors[0],
     //has key
 })
 dungeon.makeRoom({
@@ -216,8 +222,8 @@ dungeon.makeRoom({
     "directions": [
         Directions.NORTH,
         Directions.SOUTH //critpath //needs key
-    ]
-    //pink
+    ],
+    "colors": Colors[0],
 })
 dungeon.makeRoom({
     "rx": -1, "ry": 4,
@@ -225,8 +231,8 @@ dungeon.makeRoom({
         Directions.NORTH,
         Directions.WEST,
         Directions.EAST //critpath
-    ]
-    //green
+    ],
+    "colors": Colors[1],
 })
 dungeon.makeRoom({
     "rx": -2, "ry": 4,
@@ -234,8 +240,8 @@ dungeon.makeRoom({
         Directions.NORTH,
         Directions.WEST,
         Directions.EAST
-    ]
-    //green
+    ],
+    "colors": Colors[1],
     //multiroom southeast corner
     //has sign
 })
@@ -245,8 +251,8 @@ dungeon.makeRoom({
         Directions.NORTH,
         Directions.SOUTH, //needs bomb
         Directions.EAST
-    ]
-    //green
+    ],
+    "colors": Colors[1],
     //multiroom southwest corner
     //has person who can talk
 })
@@ -255,8 +261,8 @@ dungeon.makeRoom({
     "directions": [
         Directions.SOUTH,
         Directions.EAST
-    ]
-    //green
+    ],
+    "colors": Colors[1],
     //multiroom northwest corner
     //has chest
 })
@@ -265,8 +271,8 @@ dungeon.makeRoom({
     "directions": [
         Directions.SOUTH,
         Directions.WEST
-    ]
-    //green
+    ],
+    "colors": Colors[1],
     //multiroom northeast corner
     //has shop
 })
@@ -276,8 +282,8 @@ dungeon.makeRoom({
         Directions.NORTH,
         Directions.SOUTH, //critpath //needs 3 keys
         Directions.WEST
-    ]
-    //green
+    ],
+    "colors": Colors[1],
     //has 4 pots
 })
 dungeon.makeRoom({
@@ -285,8 +291,8 @@ dungeon.makeRoom({
     "directions": [
         Directions.SOUTH,
         Directions.EAST
-    ]
-    //green
+    ],
+    "colors": Colors[1],
 })
 dungeon.makeRoom({
     "rx": 1, "ry": 3,
@@ -294,15 +300,15 @@ dungeon.makeRoom({
         Directions.NORTH,
         Directions.SOUTH,
         Directions.WEST
-    ]
-    //green
+    ],
+    "colors": Colors[1],
 })
 dungeon.makeRoom({
     "rx": 1, "ry": 2,
     "directions": [
         Directions.SOUTH
-    ]
-    //green
+    ],
+    "colors": Colors[1],
     //has key
 })
 dungeon.makeRoom({
@@ -311,23 +317,23 @@ dungeon.makeRoom({
         Directions.NORTH,
         Directions.SOUTH,
         Directions.EAST,
-    ]
-    //green
+    ],
+    "colors": Colors[1],
 })
 dungeon.makeRoom({
     "rx": 2, "ry": 4,
     "directions": [
         Directions.WEST,
-    ]
-    //green
+    ],
+    "colors": Colors[1],
     //has key
 })
 dungeon.makeRoom({
     "rx": 1, "ry": 5,
     "directions": [
         Directions.NORTH,
-    ]
-    //green
+    ],
+    "colors": Colors[1],
     //has key
 })
 dungeon.makeRoom({
@@ -335,8 +341,8 @@ dungeon.makeRoom({
     "directions": [
         Directions.NORTH,
         Directions.WEST //critpath
-    ]
-    //orange
+    ],
+    "colors": Colors[2],
 })
 dungeon.makeRoom({
     "rx": -1, "ry": 5,
@@ -344,8 +350,8 @@ dungeon.makeRoom({
         Directions.SOUTH, //critpath //needs key
         Directions.WEST,
         Directions.EAST
-    ]
-    //orange
+    ],
+    "colors": Colors[2],
 })
 dungeon.makeRoom({
     "rx": -2, "ry": 5,
@@ -353,8 +359,8 @@ dungeon.makeRoom({
         Directions.SOUTH,
         Directions.WEST,
         Directions.EAST
-    ]
-    //orange
+    ],
+    "colors": Colors[2],
     //has 4 pots
 })
 dungeon.makeRoom({
@@ -363,41 +369,32 @@ dungeon.makeRoom({
         Directions.NORTH, //needs bomb
         Directions.SOUTH,
         Directions.EAST
-    ]
-    //orange
+    ],
+    "colors": Colors[2],
 })
 dungeon.makeRoom({
     "rx": -3, "ry": 6,
     "directions": [
-        Directions.NORTH,
-        Directions.WEST
-    ]
-    //orange
+        Directions.NORTH
+    ],
+    "colors": Colors[2],
     //has chest //needs chest key //has key
-})
-dungeon.makeRoom({
-    "rx": -4, "ry": 6,
-    "directions": [
-        Directions.EAST
-    ]
-    //orange
-    //has shop
 })
 dungeon.makeRoom({
     "rx": -2, "ry": 6,
     "directions": [
         Directions.NORTH,
         Directions.SOUTH
-    ]
-    //orange
+    ],
+    "colors": Colors[2],
 })
 dungeon.makeRoom({
     "rx": -2, "ry": 7,
     "directions": [
         Directions.NORTH,
         Directions.EAST
-    ]
-    //orange
+    ],
+    "colors": Colors[2],
     //has 2 pots
 })
 dungeon.makeRoom({
@@ -406,16 +403,16 @@ dungeon.makeRoom({
         Directions.SOUTH,
         Directions.WEST,
         Directions.EAST
-    ]
-    //orange
+    ],
+    "colors": Colors[2],
 })
 dungeon.makeRoom({
     "rx": -1, "ry": 8,
     "directions": [
         Directions.NORTH,
         Directions.EAST
-    ]
-    //orange
+    ],
+    "colors": Colors[2],
     //has 1 pot
 })
 dungeon.makeRoom({
@@ -423,8 +420,8 @@ dungeon.makeRoom({
     "directions": [
         Directions.WEST,
         Directions.EAST
-    ]
-    //orange
+    ],
+    "colors": Colors[2],
     //has chest
 })
 dungeon.makeRoom({
@@ -432,8 +429,8 @@ dungeon.makeRoom({
     "directions": [
         Directions.NORTH,
         Directions.WEST
-    ]
-    //orange
+    ],
+    "colors": Colors[2],
     //has 1 pot
 })
 dungeon.makeRoom({
@@ -442,8 +439,8 @@ dungeon.makeRoom({
         Directions.SOUTH,
         Directions.WEST,
         Directions.EAST
-    ]
-    //orange
+    ],
+    "colors": Colors[2],
 })
 dungeon.makeRoom({
     "rx": 0, "ry": 7,
@@ -451,15 +448,15 @@ dungeon.makeRoom({
         Directions.NORTH,
         Directions.WEST,
         Directions.EAST
-    ]
-    //orange
+    ],
+    "colors": Colors[2],
 })
 dungeon.makeRoom({
     "rx": 0, "ry": 6,
     "directions": [
         Directions.SOUTH
-    ]
-    //orange
+    ],
+    "colors": Colors[2],
     //has 12 pots
 })
 dungeon.makeRoom({
@@ -467,24 +464,24 @@ dungeon.makeRoom({
     "directions": [
         Directions.NORTH,
         Directions.WEST
-    ]
-    //orange
+    ],
+    "colors": Colors[2],
 })
 dungeon.makeRoom({
     "rx": 2, "ry": 6,
     "directions": [
         Directions.SOUTH,
         Directions.WEST
-    ]
-    //orange
+    ],
+    "colors": Colors[2],
     //has 4 pots
 })
 dungeon.makeRoom({
     "rx": 1, "ry": 6,
     "directions": [
         Directions.EAST
-    ]
-    //orange
+    ],
+    "colors": Colors[2],
     //has chest key
 })
 dungeon.makeRoom({
@@ -492,8 +489,8 @@ dungeon.makeRoom({
     "isFinalRoom": true,
     "directions": [
         Directions.NORTH
-    ]
-    //orange
+    ],
+    "colors": Colors[3],
 })
 
 for(var coords in dungeon.rooms) {

@@ -16,9 +16,7 @@ var Camera = React.createClass({
             "top": y + "em",
             "left": x + "em",
             "fontSize": z + "em",
-            "position": "absolute",
-            "transitionDuration": "0.5s",
-            "transitionProperty": "top left"
+            "position": "absolute"
         }
     }
 })

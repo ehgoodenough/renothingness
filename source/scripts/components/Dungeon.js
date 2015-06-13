@@ -8,8 +8,8 @@ var Dungeon = React.createClass({
     },
     renderRooms: function() {
         var renderings = []
-        for(var coords in this.props.dungeon.rooms) {
-            var room = this.props.dungeon.rooms[coords]
+        for(var coords in this.props.data.rooms) {
+            var room = this.props.data.rooms[coords]
             renderings.push(
                 <DungeonRoom key={coords} data={room}/>
             )
@@ -37,11 +37,10 @@ var DungeonRoom = React.createClass({
         }
     },
     renderCanvas: function() {
-        var colors = {0: "papayawhip", 1: "sienna"}
         var canvas = this.refs.canvas.getDOMNode().getContext("2d")
         for(var coords in this.props.data.tiles) {
             var tile = this.props.data.tiles[coords]
-            canvas.fillStyle = colors[tile.value]
+            canvas.fillStyle = this.props.data.colors[tile.value]
             canvas.fillRect(tile.r_x * 64, tile.r_y * 64, 64, 64)
         }
     },

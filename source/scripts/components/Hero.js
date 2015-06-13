@@ -5,13 +5,14 @@ var Hero = React.createClass({
         )
     },
     renderStyles: function() {
-        var hero = this.props.hero
+        var x = this.props.data.entity.position.x - (1 / 2)
+        var y = this.props.data.entity.position.y - (1 / 2)
         return {
             position: "absolute",
-            width: hero.width + "em",
-            height: hero.height + "em",
-            top: hero.position.y - (hero.height / 2) + "em",
-            left: hero.position.x - (hero.width / 2) + "em",
+            width: 1 + "em",
+            height: 1 + "em",
+            top: y + "em",
+            left: x + "em",
             backgroundColor: "red"
         }
     }
