@@ -159,17 +159,341 @@ var Dungeon = function() {
 
 var dungeon = new Dungeon()
 
-var room = dungeon.makeRoom({
+dungeon.makeRoom({
+    "rx": 0, "ry": 0,
     "isInitialRoom": true,
-    "rx": 0, "ry": 0
+    "directions": [
+        Directions.SOUTH //critpath
+    ]
+    //pink
 })
-for(var iterator = 0; iterator < 3; iterator++) {
-    room = room.makeAdjacentRoom({
-        //?!
-    })
-}
-var room = room.makeAdjacentRoom({
-    "isFinalRoom": true
+dungeon.makeRoom({
+    "rx": 0, "ry": 1,
+    "directions": [
+        Directions.NORTH,
+        Directions.WEST //critpath
+    ]
+    //pink
+})
+dungeon.makeRoom({
+    "rx": -1, "ry": 1,
+    "directions": [
+        Directions.EAST,
+        Directions.SOUTH //critpath
+    ]
+    //pink
+    //has 4 pots
+})
+dungeon.makeRoom({
+    "rx": -1, "ry": 2,
+    "directions": [
+        Directions.NORTH,
+        Directions.SOUTH, //critpath
+        Directions.EAST,
+        Directions.WEST
+    ]
+    //pink
+    //has 4 pots
+})
+dungeon.makeRoom({
+    "rx": 0, "ry": 2,
+    "directions": [
+        Directions.WEST
+    ]
+    //pink
+    //has chest
+})
+dungeon.makeRoom({
+    "rx": -2, "ry": 2,
+    "directions": [
+        Directions.EAST
+    ]
+    //pink
+    //has key
+})
+dungeon.makeRoom({
+    "rx": -1, "ry": 3,
+    "directions": [
+        Directions.NORTH,
+        Directions.SOUTH //critpath //needs key
+    ]
+    //pink
+})
+dungeon.makeRoom({
+    "rx": -1, "ry": 4,
+    "directions": [
+        Directions.NORTH,
+        Directions.WEST,
+        Directions.EAST //critpath
+    ]
+    //green
+})
+dungeon.makeRoom({
+    "rx": -2, "ry": 4,
+    "directions": [
+        Directions.NORTH,
+        Directions.WEST,
+        Directions.EAST
+    ]
+    //green
+    //multiroom southeast corner
+    //has sign
+})
+dungeon.makeRoom({
+    "rx": -3, "ry": 4,
+    "directions": [
+        Directions.NORTH,
+        Directions.SOUTH, //needs bomb
+        Directions.EAST
+    ]
+    //green
+    //multiroom southwest corner
+    //has person who can talk
+})
+dungeon.makeRoom({
+    "rx": -3, "ry": 3,
+    "directions": [
+        Directions.SOUTH,
+        Directions.EAST
+    ]
+    //green
+    //multiroom northwest corner
+    //has chest
+})
+dungeon.makeRoom({
+    "rx": -2, "ry": 3,
+    "directions": [
+        Directions.SOUTH,
+        Directions.WEST
+    ]
+    //green
+    //multiroom northeast corner
+    //has shop
+})
+dungeon.makeRoom({
+    "rx": 0, "ry": 4,
+    "directions": [
+        Directions.NORTH,
+        Directions.SOUTH, //critpath //needs 3 keys
+        Directions.WEST
+    ]
+    //green
+    //has 4 pots
+})
+dungeon.makeRoom({
+    "rx": 0, "ry": 3,
+    "directions": [
+        Directions.SOUTH,
+        Directions.EAST
+    ]
+    //green
+})
+dungeon.makeRoom({
+    "rx": 1, "ry": 3,
+    "directions": [
+        Directions.NORTH,
+        Directions.SOUTH,
+        Directions.WEST
+    ]
+    //green
+})
+dungeon.makeRoom({
+    "rx": 1, "ry": 2,
+    "directions": [
+        Directions.SOUTH
+    ]
+    //green
+    //has key
+})
+dungeon.makeRoom({
+    "rx": 1, "ry": 4,
+    "directions": [
+        Directions.NORTH,
+        Directions.SOUTH,
+        Directions.EAST,
+    ]
+    //green
+})
+dungeon.makeRoom({
+    "rx": 2, "ry": 4,
+    "directions": [
+        Directions.WEST,
+    ]
+    //green
+    //has key
+})
+dungeon.makeRoom({
+    "rx": 1, "ry": 5,
+    "directions": [
+        Directions.NORTH,
+    ]
+    //green
+    //has key
+})
+dungeon.makeRoom({
+    "rx": 0, "ry": 5,
+    "directions": [
+        Directions.NORTH,
+        Directions.WEST //critpath
+    ]
+    //orange
+})
+dungeon.makeRoom({
+    "rx": -1, "ry": 5,
+    "directions": [
+        Directions.SOUTH, //critpath //needs key
+        Directions.WEST,
+        Directions.EAST
+    ]
+    //orange
+})
+dungeon.makeRoom({
+    "rx": -2, "ry": 5,
+    "directions": [
+        Directions.SOUTH,
+        Directions.WEST,
+        Directions.EAST
+    ]
+    //orange
+    //has 4 pots
+})
+dungeon.makeRoom({
+    "rx": -3, "ry": 5,
+    "directions": [
+        Directions.NORTH, //needs bomb
+        Directions.SOUTH,
+        Directions.EAST
+    ]
+    //orange
+})
+dungeon.makeRoom({
+    "rx": -3, "ry": 6,
+    "directions": [
+        Directions.NORTH,
+        Directions.WEST
+    ]
+    //orange
+    //has chest //needs chest key //has key
+})
+dungeon.makeRoom({
+    "rx": -4, "ry": 6,
+    "directions": [
+        Directions.EAST
+    ]
+    //orange
+    //has shop
+})
+dungeon.makeRoom({
+    "rx": -2, "ry": 6,
+    "directions": [
+        Directions.NORTH,
+        Directions.SOUTH
+    ]
+    //orange
+})
+dungeon.makeRoom({
+    "rx": -2, "ry": 7,
+    "directions": [
+        Directions.NORTH,
+        Directions.EAST
+    ]
+    //orange
+    //has 2 pots
+})
+dungeon.makeRoom({
+    "rx": -1, "ry": 7,
+    "directions": [
+        Directions.SOUTH,
+        Directions.WEST,
+        Directions.EAST
+    ]
+    //orange
+})
+dungeon.makeRoom({
+    "rx": -1, "ry": 8,
+    "directions": [
+        Directions.NORTH,
+        Directions.EAST
+    ]
+    //orange
+    //has 1 pot
+})
+dungeon.makeRoom({
+    "rx": 0, "ry": 8,
+    "directions": [
+        Directions.WEST,
+        Directions.EAST
+    ]
+    //orange
+    //has chest
+})
+dungeon.makeRoom({
+    "rx": 1, "ry": 8,
+    "directions": [
+        Directions.NORTH,
+        Directions.WEST
+    ]
+    //orange
+    //has 1 pot
+})
+dungeon.makeRoom({
+    "rx": 1, "ry": 7,
+    "directions": [
+        Directions.SOUTH,
+        Directions.WEST,
+        Directions.EAST
+    ]
+    //orange
+})
+dungeon.makeRoom({
+    "rx": 0, "ry": 7,
+    "directions": [
+        Directions.NORTH,
+        Directions.WEST,
+        Directions.EAST
+    ]
+    //orange
+})
+dungeon.makeRoom({
+    "rx": 0, "ry": 6,
+    "directions": [
+        Directions.SOUTH
+    ]
+    //orange
+    //has 12 pots
+})
+dungeon.makeRoom({
+    "rx": 2, "ry": 7,
+    "directions": [
+        Directions.NORTH,
+        Directions.WEST
+    ]
+    //orange
+})
+dungeon.makeRoom({
+    "rx": 2, "ry": 6,
+    "directions": [
+        Directions.SOUTH,
+        Directions.WEST
+    ]
+    //orange
+    //has 4 pots
+})
+dungeon.makeRoom({
+    "rx": 1, "ry": 6,
+    "directions": [
+        Directions.EAST
+    ]
+    //orange
+    //has chest key
+})
+dungeon.makeRoom({
+    "rx": -1, "ry": 6,
+    "isFinalRoom": true,
+    "directions": [
+        Directions.NORTH
+    ]
+    //orange
 })
 
 for(var coords in dungeon.rooms) {

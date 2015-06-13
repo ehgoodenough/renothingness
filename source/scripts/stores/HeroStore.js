@@ -4,8 +4,8 @@ var HeroStore = Phlux.createStore({
     data: {
         target: {
             position: {
-                "rx": 0,
-                "ry": 0
+                "rx": -1,
+                "ry": 4
             }
         },
         entity: {
@@ -19,7 +19,7 @@ var HeroStore = Phlux.createStore({
                 "rx": 0,
                 "ry": 0
             },
-            zoom: 7
+            zoom: 9
         }
     },
     update: function(tick) {
