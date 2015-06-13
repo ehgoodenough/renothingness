@@ -63,12 +63,13 @@ var Room = function(dungeon, room) {
     this.x = this.rx * this.width,
     this.y = this.ry * this.height
     
-    this.doors = room.doors || []
+    this.tiles = {}
+    this.directions = room.directions || []
     
     this.dungeon = dungeon
     this.dungeon.rooms[this.rx + "x" + this.ry] = this
     
-    this.getPotentialDirections = function() {
+    this.getAdjacentDirections = function() {
         var directions = []
         for(var key in Directions) {
             var direction = Directions[key]
@@ -81,26 +82,26 @@ var Room = function(dungeon, room) {
         return directions
     }
     
-    this.getRandomPotentialDirection = function() {
-        var directions = this.getPotentialDirections()
+    this.getRandomAdjacentDirection = function() {
+        var directions = this.getAdjacentDirections()
         return directions[Math.floor(Random() * directions.length)]
     }
     
-    this.makeRandomAdjacentRoom = function() {
-        var direction = this.getRandomPotentialDirection()
+    this.makeAdjacentRoom = function(protoroom) {
+        var direction = this.getRandomAdjacentDirection()
         if(direction == undefined) {throw new Error("DEAD_END")}
-        this.doors.push({"direction": direction})
-        return new Room(this.dungeon, {
-            "rx": this.rx + direction.rx,
-            "ry": this.ry + direction.ry,
-            "doors": [{
-                "direction": direction.getOpposite()
-            }]
-        })
+        
+        protoroom.rx = this.rx + direction.rx
+        protoroom.ry = this.ry + direction.ry
+        var room = new Room(this.dungeon, protoroom)
+        
+        this.directions.push(direction)
+        room.directions.push(direction.getOpposite())
+        
+        return room
     }
     
     this.makeTiles = function() {
-        this.tiles = new Object()
         for(var r_x = 0; r_x < this.width; r_x++) {
             for(var r_y = 0; r_y < this.height; r_y++) {
                 var value = tilemap.layers[0].data[r_y * tilemap.width + r_x] - 1
@@ -111,14 +112,12 @@ var Room = function(dungeon, room) {
                 })
             }
         }
-        
-        // change some tiles into doors
-        for(var index in this.doors) {
-            var door = this.doors[index]
+        for(var index in this.directions) {
+            var direction = this.directions[index]
             var x = (this.width - 1) / 2
             var y = (this.height - 1) / 2
-            x += x * door.direction.rx
-            y += y * door.direction.ry
+            x += x * direction.rx
+            y += y * direction.ry
             this.tiles[x + "x" + y].value = 0
         }
     }
@@ -132,48 +131,57 @@ var DungeonColors = [
 
 var Dungeon = function() {
     
-    this.rooms = new Object()
     this.tiles = new Object()
+    this.rooms = new Object()
+    
+    this.makeRoom = function(protoroom) {
+        var room = new Room(this, protoroom)
+        return room
+    }
+    
+    this.addRoom = function(room) {
+        this.rooms[room.rx + "x" + room.ry] = room
+        return room
+    }
     
     this.getRoom = function(rx, ry) {
         return this.rooms[rx + "x" + ry]
     }
-    this.getRooms = function() {
-        return this.rooms
-    }
+    
     this.hasRoom = function(rx, ry) {
         return this.rooms[rx + "x" + ry] != undefined
     }
-    
-    //https://github.com/ehgoodenough/nothingness/blob/master/Adventure/src/computc/worlds/dungeons/RandomDungeon.java
-    //https://docs.google.com/presentation/d/1IRwMKnjM9VkgwLoavbJ_QBpBY3-LRetdivag1VuPry4/edit#slide=id.g41ff5289a_019
-    
-    // make the intial room
-    var iteratorRoom = new Room(this, {"rx": 0, "ry": 0})
-    iteratorRoom.isInitialRoom = true
-    
-    // make all the other rooms
-    for(var iterator = 0; iterator < 3; iterator++) {
-        iteratorRoom = iteratorRoom.makeRandomAdjacentRoom()
-    }
-    
-    // make the final room
-    var iteratorRoom = iteratorRoom.makeRandomAdjacentRoom()
-    iteratorRoom.isFinalRoom = true
-    
-    // generate tiles for these rooms
-    for(var coords in this.rooms) {
-        var room = this.rooms[coords]
-        room.makeTiles()
-    }
 }
 
+
+//https://github.com/ehgoodenough/nothingness/blob/master/Adventure/src/computc/worlds/dungeons/RandomDungeon.java
+//https://docs.google.com/presentation/d/1IRwMKnjM9VkgwLoavbJ_QBpBY3-LRetdivag1VuPry4/edit#slide=id.g41ff5289a_019
+
+var dungeon = new Dungeon()
+
+var room = dungeon.makeRoom({
+    "isInitialRoom": true,
+    "rx": 0, "ry": 0
+})
+for(var iterator = 0; iterator < 3; iterator++) {
+    room = room.makeAdjacentRoom({
+        //?!
+    })
+}
+var room = room.makeAdjacentRoom({
+    "isFinalRoom": true
+})
+
+for(var coords in dungeon.rooms) {
+    var room = dungeon.rooms[coords]
+    room.makeTiles()
+}
 
 
 
 var DungeonStore = Phlux.createStore({
     initiateStore: function() {
-        this.data = new Dungeon()
+        this.data = dungeon
     },
     getRoom: function(rx, ry) {
         return this.data.rooms[rx + "x" + ry]

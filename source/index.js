@@ -7,11 +7,8 @@ window.vkey = require("vkey")
 window.Random = require("seedrandom")(Date.now())
 window.IsResizing = require("<scripts>/utilities/IsResizing")
 
-window.WIDTH = 11
-window.HEIGHT = 9
 window.RWIDTH = 11
 window.RHEIGHT = 9
-window.TILE = 64
 
 var Hero = require("<scripts>/components/Hero")
 var Camera = require("<scripts>/components/Camera")
