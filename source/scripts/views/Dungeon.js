@@ -40,7 +40,11 @@ var DungeonRoom = React.createClass({
         var canvas = this.refs.canvas.getDOMNode().getContext("2d")
         for(var coords in this.props.data.tiles) {
             var tile = this.props.data.tiles[coords]
-            canvas.fillStyle = this.props.data.colors[tile.value]
+            if(tile.value == 0) {
+                canvas.fillStyle = this.props.data.tileset.floor
+            } else if(tile.value == 1) {
+                canvas.fillStyle = this.props.data.tileset.wall
+            }
             canvas.fillRect(tile.r_x * 64, tile.r_y * 64, 64, 64)
         }
     },

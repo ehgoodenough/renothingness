@@ -15,8 +15,6 @@ var reactify = require("reactify")
 var envify = require("envify/custom")
 var aliasify = require("aliasify")
 
-var opn = require("opn")
-var del = require("del")
 var chalk = require("chalk")
 var yargs = require("yargs")
 var vinyl_buffer = require("vinyl-buffer")
@@ -125,7 +123,6 @@ gulp.task("server", function() {
         livereload: true,
         port: 8080
     })
-    opn("http://localhost:8080")
 })
 
 process.on("uncaughtException", function (error) {

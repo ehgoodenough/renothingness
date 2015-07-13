@@ -1,19 +1,18 @@
 window.React = require("react")
 window.Hammer = require("hammerjs")
-window.Tickly = require("tickly")
 window.Phlux = require("phlux")
 window.Keyb = require("keyb")
-window.vkey = require("vkey")
+window.Input = require("keyb")
+window.Loop = require("tickly").loop
 window.Random = require("seedrandom")(Date.now())
-window.IsResizing = require("<scripts>/utilities/IsResizing")
 
 window.RWIDTH = 11
 window.RHEIGHT = 9
 
-var Hero = require("<scripts>/components/Hero")
-var Camera = require("<scripts>/components/Camera")
-var Dungeon = require("<scripts>/components/Dungeon")
-var GameFrame = require("<scripts>/components/GameFrame")
+var Hero = require("<scripts>/views/Hero")
+var Camera = require("<scripts>/views/Camera")
+var Dungeon = require("<scripts>/views/Dungeon")
+var GameFrame = require("<scripts>/views/GameFrame")
 
 var HeroStore = require("<scripts>/stores/HeroStore")
 var DungeonStore = require("<scripts>/stores/DungeonStore")
@@ -40,7 +39,7 @@ var Renothingness = React.createClass({
         )
     },
     componentDidMount: function() {
-        Tickly.loop(function(tick) {
+        Loop(function(tick) {
             HeroStore.update(tick)
         })
     }

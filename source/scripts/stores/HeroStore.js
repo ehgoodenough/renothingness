@@ -5,7 +5,8 @@ var HeroStore = Phlux.createStore({
         target: {
             position: {
                 "rx": 0,
-                "ry": 0
+                "ry": 0,
+                "ry": 4
             }
         },
         entity: {
