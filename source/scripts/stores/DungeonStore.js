@@ -32,104 +32,56 @@ var Room = function(dungeon, protoroom) {
     this.position.x = this.position.rx * this.width
     this.position.y = this.position.ry * this.height
     
-    this.dungeon = dungeon
-    this.dungeon.rooms[this.position.rx + "x" + this.position.ry] = this
+    dungeon.rooms[this.position.rx + "x" + this.position.ry] = this
     
-    this.hasDoorway = function(key) {
-        return this.doorways.indexOf(Directions[key]) != -1
-    }
-    
-    this.getAdjacentDirections = function() {
-        var directions = []
-        for(var key in Directions) {
-            var rx = room.position.rx + Directions[key].vector.rx
-            var ry = room.position.ry + Directions[key].vector.ry
-            if(dungeon.hasRoom(rx, ry) == false) {
-                directions.push(direction)
-            }
+    var tilemap = this.tilemap || Tilemaps.empty
+    for(var r_x = 0; r_x < this.width; r_x++) {
+        for(var r_y = 0; r_y < this.height; r_y++) {
+            var value = tilemap.layers[0].data[r_y * tilemap.width + r_x] - 1
+            var tile = new Tile(dungeon, room, {
+                "position": {"r_x": r_x, "r_y": r_y},
+                "value": value,
+            })
         }
-        return directions
     }
-    
-    this.getRandomAdjacentDirection = function() {
-        var directions = this.getAdjacentDirections()
-        return directions[Math.floor(Random() * directions.length)]
-    }
-    
-    this.makeAdjacentRoom = function(protoroom) {
-        var direction = this.getRandomAdjacentDirection()
-        if(direction == undefined) {throw new Error("DEAD_END")}
-        
-        protoroom.position = {
-            "rx": this.position.rx + direction.vector.rx,
-            "ry": this.position.ry + direction.vector.ry,
-        }
-        var room = new Room(this.dungeon, protoroom)
-        
-        this.doorways.push(direction)
-        room.doorways.push(direction.getOpposite())
-        
-        return room
-    }
-    
-    this.makeTiles = function() {
-        var tilemap = this.tilemap || Tilemaps.empty
-        for(var r_x = 0; r_x < this.width; r_x++) {
-            for(var r_y = 0; r_y < this.height; r_y++) {
-                var value = tilemap.layers[0].data[r_y * tilemap.width + r_x] - 1
-                var tile = new Tile(this.dungeon, this, {
-                    "position": {"r_x": r_x, "r_y": r_y},
-                    "value": value,
-                })
-            }
-        }
-        for(var index in this.doorways) {
-            var direction = this.doorways[index]
-            var x = (this.width - 1) / 2
-            var y = (this.height - 1) / 2
-            x += x * direction.vector.rx
-            y += y * direction.vector.ry
-            this.tiles[x + "x" + y].value = 0
-        }
+    for(var index in this.doorways) {
+        var direction = this.doorways[index]
+        var x = (this.width - 1) / 2
+        var y = (this.height - 1) / 2
+        x += x * direction.vector.rx
+        y += y * direction.vector.ry
+        this.tiles[x + "x" + y].value = 0
     }
 }
 
-var Dungeon = function(rooms) {
+Room.prototype.hasDoorway = function(key) {
+    return this.doorways.indexOf(Directions[key]) != -1
+}
+
+var Dungeon = function(protodungeon) {
+    var dungeon = this
     
-    this.tiles = new Object()
-    this.rooms = new Object()
+    dungeon.tiles = {}
+    dungeon.rooms = {}
     
-    this.makeRoom = function(protoroom) {
-        var room = new Room(this, protoroom)
-        return room
+    dungeon.name = protodungeon.name
+    
+    for(var index in protodungeon.rooms) {
+        var protoroom = protodungeon.rooms[index]
+        var room = new Room(dungeon, protoroom)
     }
-    
-    this.addRoom = function(room) {
-        this.rooms[room.position.rx + "x" + room.position.ry] = room
-        return room
-    }
-    
-    this.getRoom = function(rx, ry) {
-        return this.rooms[rx + "x" + ry]
-    }
-    
-    this.hasRoom = function(rx, ry) {
-        return this.rooms[rx + "x" + ry] != undefined
-    }
-    
-    for(var index in rooms) {
-        this.makeRoom(rooms[index])
-    }
+}
+
+Dungeon.prototype.getRoom = function(rx, ry) {
+    return this.rooms[rx + "x" + ry]
+}
+
+Dungeon.prototype.hasRoom = function(rx, ry) {
+    return !!this.rooms[rx + "x" + ry]
 }
 
 var protodungeon = require("<scripts>/data/Protodungeon")
 var dungeon = new Dungeon(protodungeon)
-
-for(var coords in dungeon.rooms) {
-    var room = dungeon.rooms[coords]
-    room.makeTiles()
-}
-
 
 
 var DungeonStore = Phlux.createStore({
