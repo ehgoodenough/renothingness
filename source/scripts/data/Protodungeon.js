@@ -1,20 +1,20 @@
-var Directions = require("<scripts>/utilities/Directions")
+var Directions = require("<scripts>/data/Directions")
 var Tilesets = require("<scripts>/data/Tilesets")
 var Tilemaps = require("<scripts>/data/Tilemaps")
 
 var Protodungeon = [
     {
-        "rx": 0, "ry": 0,
-        "isInitialRoom": true,
-        "directions": [
+        "position": {"rx": 0, "ry": 0},
+        "doorways": [
             Directions.SOUTH //critpath
         ],
         "tileset": Tilesets[0],
-        "tilemap": Tilemaps.empty
+        "tilemap": Tilemaps.empty,
+        "isInitialRoom": true,
     },
     {
-        "rx": 0, "ry": 1,
-        "directions": [
+        "position": {"rx": 0, "ry": 1},
+        "doorways": [
             Directions.NORTH,
             Directions.WEST //critpath
         ],
@@ -23,8 +23,11 @@ var Protodungeon = [
         //has save point
     },
     {
-        "rx": -1, "ry": 1,
-        "directions": [
+        "position": {
+            "rx": -1,
+            "ry": 1,
+        },
+        "doorways": [
             Directions.EAST,
             Directions.SOUTH //critpath
         ],
@@ -33,8 +36,11 @@ var Protodungeon = [
         //has 4 pots
     },
     {
-        "rx": -1, "ry": 2,
-        "directions": [
+        "position": {
+            "rx": -1,
+            "ry": 2,
+        },
+        "doorways": [
             Directions.NORTH,
             Directions.SOUTH, //critpath
             Directions.EAST,
@@ -45,8 +51,11 @@ var Protodungeon = [
         //has 4 pots
     },
     {
-        "rx": 0, "ry": 2,
-        "directions": [
+        "position": {
+            "rx": 0,
+            "ry": 2,
+        },
+        "doorways": [
             Directions.WEST
         ],
         "tileset": Tilesets[0],
@@ -54,8 +63,11 @@ var Protodungeon = [
         //has chest
     },
     {
-        "rx": -2, "ry": 2,
-        "directions": [
+        "position": {
+            "rx": -2,
+            "ry": 2,
+        },
+        "doorways": [
             Directions.EAST
         ],
         "tileset": Tilesets[0],
@@ -63,8 +75,11 @@ var Protodungeon = [
         //has key
     },
     {
-        "rx": -1, "ry": 3,
-        "directions": [
+        "position": {
+            "rx": -1,
+            "ry": 3,
+        },
+        "doorways": [
             Directions.NORTH,
             Directions.SOUTH //critpath //needs key
         ],
@@ -73,8 +88,11 @@ var Protodungeon = [
         //has save point
     },
     {
-        "rx": -1, "ry": 4,
-        "directions": [
+        "position": {
+            "rx": -1,
+            "ry": 4,
+        },
+        "doorways": [
             Directions.NORTH,
             Directions.WEST,
             Directions.EAST //critpath
@@ -83,8 +101,11 @@ var Protodungeon = [
         "tilemap": Tilemaps.oval
     },
     {
-        "rx": -2, "ry": 4,
-        "directions": [
+        "position": {
+            "rx": -2,
+            "ry": 4,
+        },
+        "doorways": [
             Directions.NORTH,
             Directions.WEST,
             Directions.EAST
@@ -94,8 +115,11 @@ var Protodungeon = [
         //has sign
     },
     {
-        "rx": -3, "ry": 4,
-        "directions": [
+        "position": {
+            "rx": -3,
+            "ry": 4,
+        },
+        "doorways": [
             Directions.NORTH,
             Directions.SOUTH, //needs bomb
             Directions.EAST
@@ -105,8 +129,11 @@ var Protodungeon = [
         //has person who can talk
     },
     {
-        "rx": -3, "ry": 3,
-        "directions": [
+        "position": {
+            "rx": -3,
+            "ry": 3,
+        },
+        "doorways": [
             Directions.SOUTH,
             Directions.EAST
         ],
@@ -115,8 +142,11 @@ var Protodungeon = [
         //has chest
     },
     {
-        "rx": -2, "ry": 3,
-        "directions": [
+        "position": {
+            "rx": -2,
+            "ry": 3,
+        },
+        "doorways": [
             Directions.SOUTH,
             Directions.WEST
         ],
@@ -125,8 +155,11 @@ var Protodungeon = [
         //has shop
     },
     {
-        "rx": 0, "ry": 4,
-        "directions": [
+        "position": {
+            "rx": 0,
+            "ry": 4,
+        },
+        "doorways": [
             Directions.NORTH,
             Directions.SOUTH, //critpath //needs 3 keys
             Directions.WEST
@@ -137,8 +170,11 @@ var Protodungeon = [
         //has 4 pots
     },
     {
-        "rx": 0, "ry": 3,
-        "directions": [
+        "position": {
+            "rx": 0,
+            "ry": 3,
+        },
+        "doorways": [
             Directions.SOUTH,
             Directions.EAST
         ],
@@ -146,8 +182,11 @@ var Protodungeon = [
         "tilemap": Tilemaps.horizontals
     },
     {
-        "rx": 1, "ry": 3,
-        "directions": [
+        "position": {
+            "rx": 1,
+            "ry": 3,
+        },
+        "doorways": [
             Directions.NORTH,
             Directions.SOUTH,
             Directions.WEST
@@ -156,8 +195,11 @@ var Protodungeon = [
         "tilemap": Tilemaps.whirl
     },
     {
-        "rx": 1, "ry": 2,
-        "directions": [
+        "position": {
+            "rx": 1,
+            "ry": 2,
+        },
+        "doorways": [
             Directions.SOUTH
         ],
         "tileset": Tilesets[1],
@@ -165,8 +207,11 @@ var Protodungeon = [
         //has key
     },
     {
-        "rx": 1, "ry": 4,
-        "directions": [
+        "position": {
+            "rx": 1,
+            "ry": 4,
+        },
+        "doorways": [
             Directions.NORTH,
             Directions.SOUTH,
             Directions.EAST,
@@ -175,8 +220,11 @@ var Protodungeon = [
         "tilemap": Tilemaps.parallels
     },
     {
-        "rx": 2, "ry": 4,
-        "directions": [
+        "position": {
+            "rx": 2,
+            "ry": 4,
+        },
+        "doorways": [
             Directions.WEST,
         ],
         "tileset": Tilesets[1],
@@ -184,8 +232,11 @@ var Protodungeon = [
         //has key
     },
     {
-        "rx": 1, "ry": 5,
-        "directions": [
+        "position": {
+            "rx": 1,
+            "ry": 5,
+        },
+        "doorways": [
             Directions.NORTH,
         ],
         "tileset": Tilesets[1],
@@ -193,8 +244,11 @@ var Protodungeon = [
         //has key
     },
     {
-        "rx": 0, "ry": 5,
-        "directions": [
+        "position": {
+            "rx": 0,
+            "ry": 5,
+        },
+        "doorways": [
             Directions.NORTH,
             Directions.WEST //critpath
         ],
@@ -202,8 +256,11 @@ var Protodungeon = [
         "tilemap": Tilemaps.dot
     },
     {
-        "rx": -1, "ry": 5,
-        "directions": [
+        "position": {
+            "rx": -1,
+            "ry": 5,
+        },
+        "doorways": [
             Directions.SOUTH, //critpath //needs key
             Directions.WEST,
             Directions.EAST
@@ -212,8 +269,11 @@ var Protodungeon = [
         "tilemap": Tilemaps.twist
     },
     {
-        "rx": -2, "ry": 5,
-        "directions": [
+        "position": {
+            "rx": -2,
+            "ry": 5,
+        },
+        "doorways": [
             Directions.SOUTH,
             Directions.WEST,
             Directions.EAST
@@ -224,8 +284,11 @@ var Protodungeon = [
         //has 4 pots
     },
     {
-        "rx": -3, "ry": 5,
-        "directions": [
+        "position": {
+            "rx": -3,
+            "ry": 5,
+        },
+        "doorways": [
             Directions.NORTH, //needs bomb
             Directions.SOUTH,
             Directions.EAST
@@ -234,8 +297,11 @@ var Protodungeon = [
         "tilemap": Tilemaps.fivedots
     },
     {
-        "rx": -3, "ry": 6,
-        "directions": [
+        "position": {
+            "rx": -3,
+            "ry": 6,
+        },
+        "doorways": [
             Directions.NORTH
         ],
         "tileset": Tilesets[2],
@@ -243,8 +309,11 @@ var Protodungeon = [
         //has chest //needs chest key //has key
     },
     {
-        "rx": -2, "ry": 6,
-        "directions": [
+        "position": {
+            "rx": -2,
+            "ry": 6,
+        },
+        "doorways": [
             Directions.NORTH,
             Directions.SOUTH
         ],
@@ -252,8 +321,11 @@ var Protodungeon = [
         "tilemap": Tilemaps.blob
     },
     {
-        "rx": -2, "ry": 7,
-        "directions": [
+        "position": {
+            "rx": -2,
+            "ry": 7,
+        },
+        "doorways": [
             Directions.NORTH,
             Directions.EAST
         ],
@@ -262,8 +334,11 @@ var Protodungeon = [
         //has 2 pots
     },
     {
-        "rx": -1, "ry": 7,
-        "directions": [
+        "position": {
+            "rx": -1,
+            "ry": 7,
+        },
+        "doorways": [
             Directions.SOUTH,
             Directions.WEST,
             Directions.EAST
@@ -272,8 +347,11 @@ var Protodungeon = [
         "tilemap": Tilemaps.cave
     },
     {
-        "rx": -1, "ry": 8,
-        "directions": [
+        "position": {
+            "rx": -1,
+            "ry": 8,
+        },
+        "doorways": [
             Directions.NORTH,
             Directions.EAST
         ],
@@ -282,8 +360,11 @@ var Protodungeon = [
         //has 1 pot
     },
     {
-        "rx": 0, "ry": 8,
-        "directions": [
+        "position": {
+            "rx": 0,
+            "ry": 8,
+        },
+        "doorways": [
             Directions.WEST,
             Directions.EAST
         ],
@@ -292,8 +373,11 @@ var Protodungeon = [
         //has chest
     },
     {
-        "rx": 1, "ry": 8,
-        "directions": [
+        "position": {
+            "rx": 1,
+            "ry": 8,
+        },
+        "doorways": [
             Directions.NORTH,
             Directions.WEST
         ],
@@ -302,8 +386,11 @@ var Protodungeon = [
         //has 1 pot
     },
     {
-        "rx": 1, "ry": 7,
-        "directions": [
+        "position": {
+            "rx": 1,
+            "ry": 7,
+        },
+        "doorways": [
             Directions.SOUTH,
             Directions.WEST,
             Directions.EAST
@@ -312,8 +399,11 @@ var Protodungeon = [
         "tilemap": Tilemaps.noise
     },
     {
-        "rx": 0, "ry": 7,
-        "directions": [
+        "position": {
+            "rx": 0,
+            "ry": 7,
+        },
+        "doorways": [
             Directions.NORTH,
             Directions.WEST,
             Directions.EAST
@@ -322,8 +412,11 @@ var Protodungeon = [
         "tilemap": Tilemaps.sixdots
     },
     {
-        "rx": 0, "ry": 6,
-        "directions": [
+        "position": {
+            "rx": 0,
+            "ry": 6,
+        },
+        "doorways": [
             Directions.SOUTH
         ],
         "tileset": Tilesets[2],
@@ -331,8 +424,11 @@ var Protodungeon = [
         //has 12 pots
     },
     {
-        "rx": 2, "ry": 7,
-        "directions": [
+        "position": {
+            "rx": 2,
+            "ry": 7,
+        },
+        "doorways": [
             Directions.NORTH,
             Directions.WEST
         ],
@@ -340,8 +436,11 @@ var Protodungeon = [
         "tilemap": Tilemaps.blob
     },
     {
-        "rx": 2, "ry": 6,
-        "directions": [
+        "position": {
+            "rx": 2,
+            "ry": 6,
+        },
+        "doorways": [
             Directions.SOUTH,
             Directions.WEST
         ],
@@ -350,8 +449,11 @@ var Protodungeon = [
         //has 4 pots
     },
     {
-        "rx": 1, "ry": 6,
-        "directions": [
+        "position": {
+            "rx": 1,
+            "ry": 6,
+        },
+        "doorways": [
             Directions.EAST
         ],
         "tileset": Tilesets[2],
@@ -359,9 +461,12 @@ var Protodungeon = [
         //has chest key
     },
     {
-        "rx": -1, "ry": 6,
+        "position": {
+            "rx": -1,
+            "ry": 6,
+        },
         "isFinalRoom": true,
-        "directions": [
+        "doorways": [
             Directions.NORTH
         ],
         "tileset": Tilesets[3],

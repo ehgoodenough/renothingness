@@ -29,22 +29,22 @@ var HeroStore = Phlux.createStore({
         
         if(Keyb.isJustDown("W")
         || Keyb.isJustDown("<up>")) {
-            if(room.hasDirection("NORTH")) {
+            if(room.hasDoorway("NORTH")) {
                 hero.target.position.ry -= 1
             }
         } if(Keyb.isJustDown("S")
         || Keyb.isJustDown("<down>")) {
-            if(room.hasDirection("SOUTH")) {
+            if(room.hasDoorway("SOUTH")) {
                 hero.target.position.ry += 1
             }
         } if(Keyb.isJustDown("A")
         || Keyb.isJustDown("<left>")) {
-            if(room.hasDirection("WEST")) {
+            if(room.hasDoorway("WEST")) {
                 hero.target.position.rx -= 1
             }
         } if(Keyb.isJustDown("D")
         || Keyb.isJustDown("<right>")) {
-            if(room.hasDirection("EAST")) {
+            if(room.hasDoorway("EAST")) {
                 hero.target.position.rx += 1
             }
         }

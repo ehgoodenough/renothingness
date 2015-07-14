@@ -1,54 +1,50 @@
-var Directions = require("<scripts>/utilities/Directions")
+var Directions = require("<scripts>/data/Directions")
 var Tilesets = require("<scripts>/data/Tilesets")
 var Tilemaps = require("<scripts>/data/Tilemaps")
 
-var Tile = function(dungeon, room, tile) {
-    this.room = room
-    this.dungeon = dungeon
+var Tile = function(dungeon, room, prototile) {
+    this.value = prototile.value
     
-    this.value = tile.value
+    this.position = {}
+    this.position.rx = room.position.rx
+    this.position.ry = room.position.ry
+    this.position.r_x = prototile.position.r_x
+    this.position.r_y = prototile.position.r_y
+    this.position.x = room.position.x + prototile.position.r_x
+    this.position.y = room.position.y + prototile.position.r_x
     
-    this.r_x = tile.r_x
-    this.r_y = tile.r_y
-    
-    this.rx = this.room.rx
-    this.ry = this.room.ry
-    this.x = this.room.x + this.r_x
-    this.y = this.room.y + this.r_y
-    
-    this.room.tiles[this.r_x + "x" + this.r_y] = this
-    this.dungeon.tiles[this.x + "x" + this.y] = this
+    room.tiles[this.position.r_x + "x" + this.position.r_y] = this
+    dungeon.tiles[this.position.x + "x" + this.position.y] = this
 }
 
-var Room = function(dungeon, room) {
-    this.rx = 0
-    this.ry = 0
+var Room = function(dungeon, protoroom) {
+    this.position = {"rx": 0, "ry": 0}
     this.tiles = {}
-    this.directions = {}
+    this.doorways = {}
     this.width = RWIDTH
     this.height = RHEIGHT
     
-    for(var key in room) {
-        this[key] = room[key]
+    var room = this
+    for(var key in protoroom) {
+        room[key] = protoroom[key]
     }
     
-    this.x = this.rx * this.width,
-    this.y = this.ry * this.height
+    this.position.x = this.position.rx * this.width
+    this.position.y = this.position.ry * this.height
     
     this.dungeon = dungeon
-    this.dungeon.rooms[this.rx + "x" + this.ry] = this
+    this.dungeon.rooms[this.position.rx + "x" + this.position.ry] = this
     
-    this.hasDirection = function(key) {
-        return this.directions.indexOf(Directions[key]) != -1
+    this.hasDoorway = function(key) {
+        return this.doorways.indexOf(Directions[key]) != -1
     }
     
     this.getAdjacentDirections = function() {
         var directions = []
         for(var key in Directions) {
-            var direction = Directions[key]
-            var rx = this.rx + direction.rx
-            var ry = this.ry + direction.ry
-            if(!this.dungeon.hasRoom(rx, ry)) {
+            var rx = room.position.rx + Directions[key].vector.rx
+            var ry = room.position.ry + Directions[key].vector.ry
+            if(dungeon.hasRoom(rx, ry) == false) {
                 directions.push(direction)
             }
         }
@@ -64,12 +60,14 @@ var Room = function(dungeon, room) {
         var direction = this.getRandomAdjacentDirection()
         if(direction == undefined) {throw new Error("DEAD_END")}
         
-        protoroom.rx = this.rx + direction.rx
-        protoroom.ry = this.ry + direction.ry
+        protoroom.position = {
+            "rx": this.position.rx + direction.vector.rx,
+            "ry": this.position.ry + direction.vector.ry,
+        }
         var room = new Room(this.dungeon, protoroom)
         
-        this.directions.push(direction)
-        room.directions.push(direction.getOpposite())
+        this.doorways.push(direction)
+        room.doorways.push(direction.getOpposite())
         
         return room
     }
@@ -80,18 +78,17 @@ var Room = function(dungeon, room) {
             for(var r_y = 0; r_y < this.height; r_y++) {
                 var value = tilemap.layers[0].data[r_y * tilemap.width + r_x] - 1
                 var tile = new Tile(this.dungeon, this, {
+                    "position": {"r_x": r_x, "r_y": r_y},
                     "value": value,
-                    "r_x": r_x,
-                    "r_y": r_y
                 })
             }
         }
-        for(var index in this.directions) {
-            var direction = this.directions[index]
+        for(var index in this.doorways) {
+            var direction = this.doorways[index]
             var x = (this.width - 1) / 2
             var y = (this.height - 1) / 2
-            x += x * direction.rx
-            y += y * direction.ry
+            x += x * direction.vector.rx
+            y += y * direction.vector.ry
             this.tiles[x + "x" + y].value = 0
         }
     }
@@ -108,7 +105,7 @@ var Dungeon = function(rooms) {
     }
     
     this.addRoom = function(room) {
-        this.rooms[room.rx + "x" + room.ry] = room
+        this.rooms[room.position.rx + "x" + room.position.ry] = room
         return room
     }
     

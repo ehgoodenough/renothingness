@@ -1,32 +1,40 @@
 var Directions = {
     NORTH: {
-        rx: 0,
-        ry: -1,
         key: "NORTH",
+        vector: {
+            rx: 0,
+            ry: -1,
+        },
         getOpposite: function() {
             return Directions.SOUTH
         }
     },
     SOUTH: {
-        rx: 0,
-        ry: +1,
         key: "SOUTH",
+        vector: {
+            rx: 0,
+            ry: +1,
+        },
         getOpposite: function() {
             return Directions.NORTH
         }
     },
     WEST: {
-        rx: -1,
-        ry: 0,
         key: "WEST",
+        vector: {
+            rx: -1,
+            ry: 0,
+        },
         getOpposite: function() {
             return Directions.EAST
         }
     },
     EAST: {
-        rx: +1,
-        ry: 0,
         key: "EAST",
+        vector: {
+            rx: +1,
+            ry: 0,
+        },
         getOpposite: function() {
             return Directions.WEST
         }
