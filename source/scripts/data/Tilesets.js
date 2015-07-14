@@ -1,19 +1,19 @@
 var Tilesets = [
     {
-        "floor": "papayawhip",
-        "wall": "sienna"
+        "floor": "#EFE4B0",
+        "wall": "#A8984B",
     },
     {
-        "floor": "indianred",
-        "wall": "firebrick"
+        "floor": "#AACF98",
+        "wall": "#5B9241",
     },
     {
-        "floor": "darkolivegreen",
-        "wall": "darkgreen"
+        "floor": "#DFA4AE",
+        "wall": "#9D4657",
     },
     {
-        "floor": "blue", 
-        "wall": "darkblue"
+        "floor": "#877EA5",
+        "wall": "#483B74",
     }
 ]
 
