@@ -17,10 +17,10 @@ var GameFrame = require("<scripts>/views/GameFrame")
 var HeroStore = require("<scripts>/stores/HeroStore")
 var DungeonStore = require("<scripts>/stores/DungeonStore")
 
-window.getFrameScale = function() {
-    var html = document.getElementById("game-frame")
-    var css = window.getComputedStyle(html)
-    return Number(css.fontSize.match(/(\d+(\.\d+)?)px$/)[1])
+window.Game = {
+    objedex: {
+        //?!
+    }
 }
 
 var Renothingness = React.createClass({
