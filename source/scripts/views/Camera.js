@@ -7,8 +7,8 @@ var Camera = React.createClass({
         )
     },
     renderStyles: function() {
-        var x = this.props.data.camera.position.rx * RWIDTH * -1
-        var y = this.props.data.camera.position.ry * RHEIGHT * -1
+        var x = (this.props.data.camera.position.rx * RWIDTH) * -1
+        var y = (this.props.data.camera.position.ry * RHEIGHT) * -1
         x += ((this.props.data.camera.zoom - 1) * RWIDTH) / 2
         y += ((this.props.data.camera.zoom - 1) * RHEIGHT) / 2
         var z = 1 / (this.props.data.camera.zoom || 1)

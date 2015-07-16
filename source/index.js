@@ -9,39 +9,41 @@ window.Random = require("seedrandom")(Date.now())
 window.RWIDTH = 11
 window.RHEIGHT = 9
 
-var Hero = require("<scripts>/views/Hero")
 var Camera = require("<scripts>/views/Camera")
-var Dungeon = require("<scripts>/views/Dungeon")
 var GameFrame = require("<scripts>/views/GameFrame")
 
-var HeroStore = require("<scripts>/stores/HeroStore")
-var DungeonStore = require("<scripts>/stores/DungeonStore")
+var Hero = require("<scripts>/stores/Hero")
+var HeroView = require("<scripts>/views/HeroView")
+var Dungeon = require("<scripts>/stores/Dungeon")
+var DungeonView = require("<scripts>/views/DungeonView")
+
+var protohero = require("<scripts>/data/Protohero")
+var protodungeon = require("<scripts>/data/Protodungeon")
 
 window.Game = {
-    objedex: {
-        //?!
-    }
+    "hero": new Hero(protohero),
+    "dungeon": new Dungeon(protodungeon),
 }
 
 var Renothingness = React.createClass({
-    mixins: [
-        Phlux.connectStore(HeroStore, "hero"),
-        Phlux.connectStore(DungeonStore, "dungeon")
-    ],
+    getInitialState: function() {
+        return Game
+    },
     render: function() {
         return (
             <GameFrame aspect-ratio="11x9">
                 <Camera data={this.state["hero"]}>
-                    <Dungeon data={this.state["dungeon"]}/>
-                    <Hero data={this.state["hero"]}/>
+                    <DungeonView data={this.state["dungeon"]}/>
+                    <HeroView data={this.state["hero"]}/>
                 </Camera>
             </GameFrame>
         )
     },
     componentDidMount: function() {
         Loop(function(tick) {
-            HeroStore.update(tick)
-        })
+            Game.hero.update(tick)
+            this.setState(Game)
+        }.bind(this))
     }
 })
 
